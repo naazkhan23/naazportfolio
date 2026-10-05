@@ -1,0 +1,4459 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Naaz — Fashion & Creative Studio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Jost:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <style>
+        /* ROOT */
+        :root {
+            --bg: #e6ded3;
+            --paper: #f5f0e9;
+            --paper2: #ded4c6;
+            --brown: #916a48;
+            --brown-dark: #5f432e;
+            --dark: #211915;
+            --muted: #766b62;
+            --line: rgba(33, 25, 21, .14);
+            --white: #fffdf9;
+            --shadow: 0 25px 70px rgba(43, 30, 20, .13);
+            --shadow2: 0 10px 30px rgba(48, 35, 25, .10);
+            --radius: 24px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Jost', sans-serif;
+            background: var(--bg);
+            color: var(--dark);
+            overflow-x: hidden;
+        }
+
+        body.modal-open {
+            overflow: hidden;
+        }
+
+        button,
+        input,
+        textarea,
+        select {
+            font: inherit;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        img {
+            max-width: 100%;
+            display: block;
+        }
+
+        ::selection {
+            background: var(--brown);
+            color: white;
+        }
+
+        /* SCROLL PROGRESS */
+        .scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            width: 0%;
+            background: var(--brown);
+            z-index: 99999;
+        }
+
+        /* CURTAIN */
+        .page-transition {
+            position: fixed;
+            inset: 0;
+            background: var(--dark);
+            z-index: 99998;
+            transform: translateY(100%);
+            pointer-events: none;
+        }
+
+        .page-transition.go {
+            animation: curtain .85s ease;
+        }
+
+        @keyframes curtain {
+            0% {
+                transform: translateY(100%)
+            }
+
+            45% {
+                transform: translateY(0)
+            }
+
+            55% {
+                transform: translateY(0)
+            }
+
+            100% {
+                transform: translateY(-100%)
+            }
+        }
+
+        /* HEADER */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 5000;
+            padding: 18px 4%;
+            transition: .4s ease;
+        }
+
+        header.scrolled {
+            padding: 10px 4%;
+        }
+
+        .navbar {
+            max-width: 1450px;
+            margin: auto;
+            padding: 13px 18px;
+            display: flex;
+            align-items: center;
+            gap: 25px;
+            border: 1px solid rgba(255, 255, 255, .32);
+            background: rgba(245, 240, 233, .72);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            box-shadow: 0 10px 35px rgba(45, 30, 20, .08);
+            border-radius: 50px;
+        }
+
+        .logo {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 32px;
+            font-weight: 600;
+            margin-right: auto;
+            letter-spacing: -1px;
+        }
+
+        .logo span {
+            color: var(--brown);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 4px;
+            align-items: center;
+        }
+
+        .nav-links button {
+            border: 0;
+            background: transparent;
+            color: var(--dark);
+            padding: 10px 12px;
+            border-radius: 30px;
+            font-size: 12px;
+            transition: .3s ease;
+        }
+
+        .nav-links button:hover,
+        .nav-links button.active {
+            background: var(--dark);
+            color: white;
+        }
+
+        .nav-work {
+            border: 0;
+            background: var(--brown);
+            color: white;
+            border-radius: 30px;
+            padding: 12px 19px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: .3s ease;
+        }
+
+        .nav-work:hover {
+            background: var(--dark);
+            transform: translateY(-2px);
+        }
+
+        .nav-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 1px solid var(--line);
+            background: rgba(255, 255, 255, .3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: .3s;
+        }
+
+        .nav-icon:hover {
+            background: var(--brown);
+            color: white;
+            transform: rotate(10deg);
+        }
+
+        .menu-btn {
+            display: none;
+        }
+
+        /* MOBILE MENU */
+        .mobile-menu {
+            position: fixed;
+            inset: 0;
+            z-index: 4500;
+            background: rgba(33, 25, 21, .97);
+            color: white;
+            display: none;
+            padding: 120px 30px 30px;
+        }
+
+        .mobile-menu.show {
+            display: block;
+        }
+
+        .mobile-menu button {
+            width: 100%;
+            background: none;
+            border: 0;
+            color: white;
+            text-align: left;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, .12);
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 30px;
+        }
+
+        /* PAGE SYSTEM */
+        .page {
+            display: none;
+            min-height: 100vh;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        /* COMMON */
+        .container {
+            width: min(1200px, 90%);
+            margin: auto;
+        }
+
+        .eyebrow {
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            font-size: 10px;
+            color: var(--brown);
+            font-weight: 600;
+        }
+
+        .section-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: end;
+            gap: 30px;
+            margin-bottom: 55px;
+        }
+
+        .section-head h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(45px, 6vw, 78px);
+            line-height: .9;
+            font-weight: 500;
+        }
+
+        .section-head p {
+            max-width: 370px;
+            color: var(--muted);
+            font-size: 14px;
+            line-height: 1.8;
+        }
+
+        .outline-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            border: 1px solid var(--line);
+            padding: 13px 20px;
+            border-radius: 40px;
+            background: transparent;
+            transition: .35s ease;
+        }
+
+        .outline-btn:hover {
+            background: var(--dark);
+            color: white;
+            border-color: var(--dark);
+            transform: translateY(-3px);
+        }
+
+        .primary-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            border: 0;
+            padding: 15px 24px;
+            border-radius: 40px;
+            background: var(--dark);
+            color: white;
+            transition: .35s ease;
+        }
+
+        .primary-btn:hover {
+            background: var(--brown);
+            transform: translateY(-3px);
+        }
+
+        /* HOME HERO */
+        .hero {
+            min-height: 100vh;
+            padding: 150px 5% 70px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 70px;
+            align-items: center;
+        }
+
+        .hero-copy {
+            position: relative;
+        }
+
+        .hero-copy h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(75px, 9vw, 145px);
+            line-height: .78;
+            font-weight: 500;
+            letter-spacing: -6px;
+            margin: 22px 0 30px;
+        }
+
+        .hero-copy h1 em {
+            color: var(--brown);
+            font-weight: 400;
+        }
+
+        .hero-copy p {
+            max-width: 520px;
+            color: var(--muted);
+            line-height: 1.9;
+            font-size: 15px;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 32px;
+            flex-wrap: wrap;
+        }
+
+        .hero-meta {
+            display: flex;
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .meta-item strong {
+            display: block;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 26px;
+        }
+
+        .meta-item span {
+            font-size: 10px;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+
+        .hero-image-wrap {
+            position: relative;
+        }
+
+        .hero-image {
+            height: 650px;
+            overflow: hidden;
+            border-radius: 160px 160px 15px 15px;
+            box-shadow: var(--shadow);
+        }
+
+        .hero-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: 1s ease;
+        }
+
+        .hero-image:hover img {
+            transform: scale(1.04);
+        }
+
+        .hero-tag {
+            position: absolute;
+            right: -25px;
+            bottom: 45px;
+            background: var(--paper);
+            padding: 20px 25px;
+            border-radius: 50px;
+            box-shadow: var(--shadow);
+            font-size: 11px;
+            letter-spacing: 1px;
+        }
+
+        /* FLOATING CONCIERGE */
+        .concierge-float {
+            position: fixed;
+            right: 27px;
+            bottom: 28px;
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            background: var(--brown);
+            color: white;
+            border: 7px solid rgba(245, 240, 233, .85);
+            box-shadow: 0 15px 40px rgba(80, 50, 30, .25);
+            z-index: 4000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: .4s ease;
+        }
+
+        .concierge-float:hover {
+            transform: scale(1.1) rotate(8deg);
+            background: var(--dark);
+        }
+
+        .concierge-float::before {
+            content: "";
+            position: absolute;
+            inset: -9px;
+            border: 1px solid rgba(145, 106, 72, .4);
+            border-radius: 50%;
+            animation: pulseRing 2.8s infinite;
+        }
+
+        @keyframes pulseRing {
+
+            0%,
+            100% {
+                transform: scale(.95);
+                opacity: .2
+            }
+
+            50% {
+                transform: scale(1.12);
+                opacity: 1
+            }
+        }
+
+        .concierge-float i {
+            font-size: 21px;
+        }
+
+        /* MARQUEE */
+        .marquee {
+            overflow: hidden;
+            border-top: 1px solid var(--line);
+            border-bottom: 1px solid var(--line);
+            padding: 19px 0;
+        }
+
+        .marquee-track {
+            display: flex;
+            width: max-content;
+            animation: marquee 25s linear infinite;
+        }
+
+        .marquee span {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 24px;
+            margin-right: 60px;
+            white-space: nowrap;
+        }
+
+        .marquee span::after {
+            content: "✦";
+            margin-left: 60px;
+            color: var(--brown);
+        }
+
+        @keyframes marquee {
+            to {
+                transform: translateX(-50%)
+            }
+        }
+
+        /* INTRO */
+        .intro {
+            padding: 130px 0;
+        }
+
+        .intro-grid {
+            display: grid;
+            grid-template-columns: .8fr 1.4fr;
+            gap: 80px;
+        }
+
+        .intro h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(45px, 6vw, 80px);
+            line-height: .9;
+            font-weight: 500;
+        }
+
+        .intro-content p {
+            font-size: 19px;
+            line-height: 1.8;
+            color: var(--muted);
+            max-width: 750px;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 70px;
+        }
+
+        .feature-card {
+            padding: 35px;
+            min-height: 250px;
+            border: 1px solid var(--line);
+            position: relative;
+            transition: .4s ease;
+            cursor: pointer;
+            background: rgba(255, 255, 255, .16);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+            background: var(--paper);
+            box-shadow: var(--shadow);
+        }
+
+        .feature-card .number {
+            font-size: 11px;
+            color: var(--brown);
+        }
+
+        .feature-card i {
+            font-size: 22px;
+            margin: 35px 0 20px;
+        }
+
+        .feature-card h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 31px;
+            font-weight: 500;
+        }
+
+        /* PROCESS */
+        .process {
+            background: var(--dark);
+            color: white;
+            padding: 110px 0;
+        }
+
+        .process .eyebrow {
+            color: #c6a17e;
+        }
+
+        .process h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 70px;
+            font-weight: 500;
+        }
+
+        .process-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            margin-top: 70px;
+        }
+
+        .process-card {
+            padding: 35px;
+            border-left: 1px solid rgba(255, 255, 255, .15);
+            cursor: pointer;
+            transition: .4s;
+        }
+
+        .process-card:hover {
+            background: rgba(255, 255, 255, .04);
+            transform: translateY(-8px);
+        }
+
+        .process-card span {
+            color: #b89573;
+            font-size: 11px;
+        }
+
+        .process-card i {
+            font-size: 22px;
+            margin: 50px 0 20px;
+        }
+
+        .process-card h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 32px;
+            font-weight: 500;
+        }
+
+        .process-card p {
+            color: #a9a09a;
+            line-height: 1.7;
+            margin-top: 12px;
+            font-size: 13px;
+        }
+
+        /* ABOUT */
+        .about {
+            padding: 130px 0;
+        }
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: .9fr 1.1fr;
+            gap: 90px;
+            align-items: center;
+        }
+
+        .about-photo {
+            height: 650px;
+            overflow: hidden;
+            border-radius: 12px 150px 12px 12px;
+            background: var(--paper2);
+        }
+
+        .about-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .about-content h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 75px;
+            line-height: .9;
+            font-weight: 500;
+            margin: 15px 0 30px;
+        }
+
+        .about-content h2 span {
+            color: var(--brown);
+        }
+
+        .about-content>p {
+            color: var(--muted);
+            line-height: 1.9;
+        }
+
+        .about-points {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 35px;
+        }
+
+        .about-point {
+            border-top: 1px solid var(--line);
+            padding-top: 15px;
+        }
+
+        .about-point strong {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 24px;
+        }
+
+        .about-point p {
+            font-size: 12px;
+            color: var(--muted);
+            margin-top: 5px;
+        }
+
+        /* PRIVILEGE */
+        .privilege {
+            padding: 110px 0;
+            background: var(--paper);
+        }
+
+        .privilege-box {
+            background: var(--dark);
+            color: white;
+            border-radius: 35px;
+            padding: 65px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .privilege-box::after {
+            content: "N";
+            position: absolute;
+            right: -40px;
+            top: -100px;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 420px;
+            color: rgba(255, 255, 255, .025);
+        }
+
+        .privilege-content {
+            position: relative;
+            z-index: 2;
+            max-width: 700px;
+        }
+
+        .privilege h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 75px;
+            font-weight: 500;
+            line-height: .9;
+            margin: 18px 0;
+        }
+
+        .privilege p {
+            color: #bdb4ad;
+            line-height: 1.8;
+            max-width: 600px;
+        }
+
+        .privilege-grid {
+            position: relative;
+            z-index: 2;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-top: 45px;
+        }
+
+        .privilege-item {
+            border: 1px solid rgba(255, 255, 255, .14);
+            padding: 25px;
+            min-height: 170px;
+            cursor: pointer;
+            transition: .35s;
+        }
+
+        .privilege-item:hover {
+            background: rgba(255, 255, 255, .06);
+            transform: translateY(-6px);
+        }
+
+        .privilege-item i {
+            color: #c09b78;
+            font-size: 20px;
+        }
+
+        .privilege-item h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 24px;
+            font-weight: 500;
+            margin-top: 30px;
+        }
+
+        /* PORTFOLIO */
+        .portfolio {
+            padding: 130px 0;
+        }
+
+        .creation-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 22px;
+        }
+
+        .creation-card {
+            min-height: 550px;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            background: #c9bdae;
+        }
+
+        .creation-card.large {
+            min-height: 700px;
+        }
+
+        .creation-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            inset: 0;
+            transition: .8s ease;
+        }
+
+        .creation-card::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(20, 14, 11, .82), transparent 55%);
+        }
+
+        .creation-card:hover img {
+            transform: scale(1.06);
+        }
+
+        .creation-info {
+            position: absolute;
+            z-index: 2;
+            left: 30px;
+            right: 30px;
+            bottom: 30px;
+            color: white;
+        }
+
+        .creation-info small {
+            color: #dbc2aa;
+            letter-spacing: 2px;
+        }
+
+        .creation-info h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 42px;
+            font-weight: 500;
+            margin: 7px 0 15px;
+        }
+
+        .collection-btn {
+            border: 1px solid rgba(255, 255, 255, .4);
+            background: rgba(255, 255, 255, .08);
+            backdrop-filter: blur(8px);
+            color: white;
+            border-radius: 30px;
+            padding: 10px 16px;
+            font-size: 11px;
+            transition: .3s;
+        }
+
+        .collection-btn:hover {
+            background: white;
+            color: var(--dark);
+        }
+
+        /* SERVICES */
+        .services {
+            padding: 130px 0;
+            background: var(--paper);
+        }
+
+        .service-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+
+        .service-card {
+            padding: 40px;
+            min-height: 300px;
+            border: 1px solid var(--line);
+            background: rgba(255, 255, 255, .2);
+            cursor: pointer;
+            transition: .4s;
+            position: relative;
+        }
+
+        .service-card:hover {
+            background: white;
+            transform: translateY(-8px);
+            box-shadow: var(--shadow);
+        }
+
+        .service-card .service-no {
+            color: var(--brown);
+            font-size: 11px;
+        }
+
+        .service-card i {
+            font-size: 24px;
+            margin: 45px 0 25px;
+        }
+
+        .service-card h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 34px;
+            font-weight: 500;
+        }
+
+        .service-card p {
+            font-size: 13px;
+            color: var(--muted);
+            line-height: 1.7;
+            margin-top: 10px;
+        }
+
+        /* SKILLS */
+        .skills {
+            padding: 130px 0;
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+        }
+
+        .skill-group h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 35px;
+            font-weight: 500;
+            margin-bottom: 35px;
+        }
+
+        .skill {
+            margin-bottom: 30px;
+            cursor: pointer;
+        }
+
+        .skill-top {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 9px;
+            font-size: 12px;
+        }
+
+        .skill-bar {
+            height: 3px;
+            background: rgba(33, 25, 21, .1);
+        }
+
+        .skill-fill {
+            width: 0;
+            height: 100%;
+            background: var(--brown);
+            transition: 1.5s cubic-bezier(.2, .8, .2, 1);
+        }
+
+        /* DIGITAL */
+        .digital {
+            padding: 130px 0;
+            background: var(--paper);
+        }
+
+        .digital-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 70px;
+            align-items: center;
+        }
+
+        .digital-image {
+            height: 560px;
+            overflow: hidden;
+            border-radius: 160px 12px 12px 12px;
+        }
+
+        .digital-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .digital-list {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 30px;
+        }
+
+        .digital-list button {
+            text-align: left;
+            padding: 15px;
+            border: 1px solid var(--line);
+            background: transparent;
+            transition: .3s;
+        }
+
+        .digital-list button:hover {
+            background: var(--dark);
+            color: white;
+            transform: translateX(5px);
+        }
+
+        /* =========================================================
+           EDUCATION + EXPERIENCE (from first code)
+        ========================================================= */
+        .edu-page {
+            padding: 150px 0 100px;
+        }
+
+        .edu-page .eyebrow {
+            font-size: 11px;
+            margin-bottom: 15px;
+        }
+
+        .education-intro {
+            display: grid;
+            grid-template-columns: .8fr 1.2fr;
+            gap: 70px;
+            margin-bottom: 65px;
+        }
+
+        .education-intro h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 80px;
+            line-height: .82;
+            font-weight: 500;
+        }
+
+        .education-intro h2 span {
+            color: var(--brown);
+        }
+
+        .education-intro p {
+            color: var(--muted);
+            line-height: 1.9;
+            align-self: end;
+        }
+
+        .education-stage {
+            position: relative;
+            padding: 35px 0;
+        }
+
+        .education-line {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 1px;
+            background: var(--line);
+            transform: translateX(-50%);
+        }
+
+        .education-card {
+            width: calc(50% - 45px);
+            background: var(--paper);
+            border: 1px solid var(--line);
+            border-radius: 26px;
+            padding: 30px;
+            margin-bottom: 35px;
+            position: relative;
+            cursor: pointer;
+            transition: .4s;
+        }
+
+        .education-card:nth-child(odd) {
+            margin-right: auto;
+        }
+
+        .education-card:nth-child(even) {
+            margin-left: auto;
+        }
+
+        .education-card:hover {
+            transform: translateY(-6px);
+            box-shadow: var(--shadow);
+            border-color: rgba(145, 106, 72, .35);
+        }
+
+        .education-card::after {
+            content: "";
+            position: absolute;
+            width: 13px;
+            height: 13px;
+            border-radius: 50%;
+            background: var(--brown);
+            top: 35px;
+        }
+
+        .education-card:nth-child(odd)::after {
+            right: -53px;
+        }
+
+        .education-card:nth-child(even)::after {
+            left: -53px;
+        }
+
+        .edu-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+        }
+
+        .edu-year {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 40px;
+            color: var(--brown);
+        }
+
+        .edu-badge {
+            padding: 6px 10px;
+            border-radius: 20px;
+            background: var(--paper2);
+            color: var(--brown-dark);
+            font-size: 9px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .education-card h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 30px;
+            font-weight: 500;
+            margin: 15px 0 4px;
+        }
+
+        .education-card p {
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .edu-click {
+            margin-top: 20px;
+            color: var(--brown);
+            font-size: 10px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .edu-highlight {
+            margin-top: 30px;
+            background: var(--dark);
+            color: white;
+            border-radius: 28px;
+            padding: 35px;
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            align-items: center;
+            gap: 25px;
+        }
+
+        .edu-highlight-icon {
+            width: 65px;
+            height: 65px;
+            border-radius: 50%;
+            border: 1px solid rgba(255, 255, 255, .15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #c6a98c;
+            font-size: 23px;
+        }
+
+        .edu-highlight h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 30px;
+            font-weight: 500;
+        }
+
+        .edu-highlight p {
+            color: rgba(255, 255, 255, .6);
+            font-size: 12px;
+            margin-top: 5px;
+        }
+
+        .edu-highlight button {
+            border: 1px solid rgba(255, 255, 255, .2);
+            background: transparent;
+            color: white;
+            border-radius: 30px;
+            padding: 12px 18px;
+            font-size: 10px;
+            text-transform: uppercase;
+        }
+
+        .experience-hero {
+            display: grid;
+            grid-template-columns: .8fr 1.2fr;
+            gap: 70px;
+            align-items: center;
+            margin-bottom: 70px;
+        }
+
+        .experience-number {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 170px;
+            line-height: .65;
+            color: var(--brown);
+        }
+
+        .experience-label {
+            margin-top: 40px;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+
+        .experience-hero h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 75px;
+            line-height: .85;
+            font-weight: 500;
+        }
+
+        .experience-hero h2 span {
+            color: var(--brown);
+        }
+
+        .experience-hero p {
+            color: var(--muted);
+            line-height: 1.9;
+            margin-top: 25px;
+            max-width: 650px;
+        }
+
+        .experience-dashboard {
+            display: grid;
+            grid-template-columns: 1.1fr .9fr;
+            gap: 18px;
+        }
+
+        .experience-main {
+            background: var(--paper);
+            border: 1px solid var(--line);
+            border-radius: 28px;
+            padding: 35px;
+            min-height: 390px;
+        }
+
+        .exp-label {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--brown);
+        }
+
+        .experience-main h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 43px;
+            font-weight: 500;
+            margin: 20px 0 10px;
+        }
+
+        .experience-main p {
+            color: var(--muted);
+            line-height: 1.8;
+            font-size: 13px;
+        }
+
+        .exp-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-top: 35px;
+        }
+
+        .exp-stat {
+            padding: 18px;
+            background: rgba(222, 212, 198, .45);
+            border-radius: 16px;
+        }
+
+        .exp-stat strong {
+            display: block;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 28px;
+        }
+
+        .exp-stat span {
+            font-size: 9px;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .experience-side {
+            display: grid;
+            gap: 18px;
+        }
+
+        .exp-interactive {
+            background: var(--dark);
+            color: white;
+            border-radius: 28px;
+            padding: 30px;
+            cursor: pointer;
+            min-height: 185px;
+            transition: .4s;
+        }
+
+        .exp-interactive:hover {
+            transform: translateY(-5px);
+            background: var(--brown-dark);
+        }
+
+        .exp-interactive i {
+            color: #c6a98c;
+            font-size: 22px;
+        }
+
+        .exp-interactive h4 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 27px;
+            font-weight: 500;
+            margin: 25px 0 5px;
+        }
+
+        .exp-interactive p {
+            font-size: 11px;
+            color: rgba(255, 255, 255, .6);
+        }
+
+        .experience-skills {
+            margin-top: 18px;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+        }
+
+        .exp-skill {
+            padding: 20px;
+            background: var(--paper);
+            border: 1px solid var(--line);
+            border-radius: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: .3s;
+        }
+
+        .exp-skill:hover {
+            transform: translateY(-5px);
+            border-color: var(--brown);
+        }
+
+        .exp-skill i {
+            color: var(--brown);
+            font-size: 20px;
+            margin-bottom: 12px;
+        }
+
+        .exp-skill span {
+            display: block;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: .7px;
+        }
+
+        .client-benefits {
+            margin-top: 100px;
+        }
+
+        .client-benefits-heading {
+            display: flex;
+            justify-content: space-between;
+            gap: 30px;
+            align-items: end;
+            margin-bottom: 35px;
+        }
+
+        .client-benefits-heading h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 65px;
+            line-height: .85;
+            font-weight: 500;
+        }
+
+        .client-benefits-heading h2 span {
+            color: var(--brown);
+        }
+
+        .client-benefits-heading p {
+            max-width: 420px;
+            color: var(--muted);
+            line-height: 1.7;
+            font-size: 13px;
+        }
+
+        .benefit-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+        }
+
+        .benefit-card {
+            background: var(--paper);
+            border: 1px solid var(--line);
+            border-radius: 24px;
+            padding: 27px;
+            min-height: 240px;
+            position: relative;
+            cursor: pointer;
+            transition: .4s;
+            overflow: hidden;
+        }
+
+        .benefit-card::before {
+            content: "";
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 1px solid rgba(145, 106, 72, .12);
+            right: -45px;
+            bottom: -45px;
+        }
+
+        .benefit-card:hover {
+            transform: translateY(-7px);
+            box-shadow: var(--shadow2);
+            background: var(--white);
+        }
+
+        .benefit-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: var(--paper2);
+            color: var(--brown);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .benefit-card h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 27px;
+            font-weight: 500;
+            margin: 28px 0 8px;
+        }
+
+        .benefit-card p {
+            font-size: 11px;
+            color: var(--muted);
+            line-height: 1.7;
+        }
+
+        .benefit-card .free {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            color: var(--brown);
+            font-size: 8px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .why-naaz {
+            margin-top: 100px;
+            background: var(--paper2);
+            border-radius: 32px;
+            padding: 65px;
+        }
+
+        .why-grid {
+            display: grid;
+            grid-template-columns: .7fr 1.3fr;
+            gap: 70px;
+        }
+
+        .why-grid h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 70px;
+            line-height: .85;
+            font-weight: 500;
+        }
+
+        .why-grid h2 span {
+            color: var(--brown);
+        }
+
+        .why-list {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .why-item {
+            background: rgba(255, 255, 255, .4);
+            border: 1px solid rgba(33, 25, 21, .08);
+            border-radius: 20px;
+            padding: 25px;
+            cursor: pointer;
+            transition: .3s;
+        }
+
+        .why-item:hover {
+            background: var(--paper);
+            transform: translateY(-4px);
+        }
+
+        .why-item i {
+            color: var(--brown);
+        }
+
+        .why-item h4 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 25px;
+            font-weight: 500;
+            margin: 18px 0 5px;
+        }
+
+        .why-item p {
+            color: var(--muted);
+            font-size: 11px;
+        }
+
+        /* CONTACT */
+        .contact {
+            padding: 130px 0;
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: .8fr 1.2fr;
+            gap: 90px;
+        }
+
+        .contact-left h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 80px;
+            line-height: .85;
+            font-weight: 500;
+            margin: 15px 0 30px;
+        }
+
+        .contact-left p {
+            color: var(--muted);
+            line-height: 1.8;
+        }
+
+        .contact-details {
+            margin-top: 40px;
+        }
+
+        .contact-detail {
+            padding: 15px 0;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .contact-detail small {
+            color: var(--brown);
+            display: block;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .contact-detail strong {
+            font-weight: 400;
+            display: block;
+            margin-top: 4px;
+        }
+
+        .contact-form {
+            background: var(--paper);
+            padding: 45px;
+            border-radius: 25px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .field {
+            margin-bottom: 18px;
+        }
+
+        .field label {
+            display: block;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 8px;
+            color: var(--muted);
+        }
+
+        .field input,
+        .field textarea,
+        .field select {
+            width: 100%;
+            border: 1px solid var(--line);
+            background: rgba(255, 255, 255, .5);
+            padding: 14px 15px;
+            outline: none;
+            color: var(--dark);
+        }
+
+        .field textarea {
+            min-height: 130px;
+            resize: vertical;
+        }
+
+        /* FOOTER */
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 50px 5%;
+        }
+
+        .footer-inner {
+            max-width: 1400px;
+            margin: auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .footer-logo {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 38px;
+        }
+
+        .footer-logo span {
+            color: #c09a77;
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 8px;
+        }
+
+        .footer-social a {
+            width: 38px;
+            height: 38px;
+            border: 1px solid rgba(255, 255, 255, .15);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: .3s;
+        }
+
+        .footer-social a:hover {
+            background: white;
+            color: var(--dark);
+        }
+
+        /* MODAL SYSTEM */
+        .modal {
+            position: fixed;
+            inset: 0;
+            z-index: 10000;
+            background: rgba(24, 18, 15, .76);
+            backdrop-filter: blur(14px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 25px;
+        }
+
+        .modal.show {
+            display: flex;
+            animation: modalIn .35s ease;
+        }
+
+        @keyframes modalIn {
+            from {
+                opacity: 0
+            }
+
+            to {
+                opacity: 1
+            }
+        }
+
+        .modal-box {
+            width: min(1050px, 100%);
+            max-height: 90vh;
+            overflow: auto;
+            background: var(--paper);
+            color: var(--dark);
+            border-radius: 28px;
+            box-shadow: 0 30px 100px rgba(0, 0, 0, .3);
+            position: relative;
+            padding: 45px;
+        }
+
+        .modal-close {
+            position: absolute;
+            right: 22px;
+            top: 22px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 1px solid var(--line);
+            background: transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 4;
+        }
+
+        .modal-close:hover {
+            background: var(--dark);
+            color: white;
+        }
+
+        .modal-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 60px;
+            line-height: .9;
+            font-weight: 500;
+            margin: 12px 0 15px;
+        }
+
+        .modal-title span {
+            color: var(--brown);
+        }
+
+        .modal-description {
+            color: var(--muted);
+            max-width: 650px;
+            line-height: 1.8;
+        }
+
+        /* COLLECTION MODAL */
+        .collection-images {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-top: 35px;
+        }
+
+        .collection-image {
+            height: 230px;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .collection-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: .6s;
+        }
+
+        .collection-image:hover img {
+            transform: scale(1.08);
+        }
+
+        /* WORK MODAL */
+        .work-box {
+            width: min(1150px, 100%);
+            padding: 0;
+            overflow: hidden;
+        }
+
+        .work-layout {
+            display: grid;
+            grid-template-columns: .72fr 1.28fr;
+        }
+
+        .work-intro {
+            background: var(--dark);
+            color: white;
+            padding: 55px 40px;
+        }
+
+        .work-intro .eyebrow {
+            color: #c09a77;
+        }
+
+        .work-intro h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 65px;
+            line-height: .9;
+            font-weight: 500;
+            margin: 20px 0;
+        }
+
+        .work-intro p {
+            color: #aaa09a;
+            line-height: 1.8;
+        }
+
+        .work-steps {
+            margin-top: 40px;
+        }
+
+        .work-step {
+            display: flex;
+            gap: 15px;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, .12);
+        }
+
+        .work-step span {
+            color: #c09a77;
+        }
+
+        .work-form-area {
+            padding: 50px;
+            position: relative;
+        }
+
+        .work-form-area h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 35px;
+            font-weight: 500;
+        }
+
+        .service-choices {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+            margin: 20px 0;
+        }
+
+        .service-choice {
+            border: 1px solid var(--line);
+            padding: 13px;
+            background: transparent;
+            text-align: left;
+            transition: .3s;
+        }
+
+        .service-choice:hover,
+        .service-choice.selected {
+            background: var(--dark);
+            color: white;
+        }
+
+        .service-choice i {
+            margin-right: 8px;
+            color: var(--brown);
+        }
+
+        /* CONCIERGE MODAL */
+        .concierge-box {
+            width: min(700px, 100%);
+        }
+
+        .concierge-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 30px;
+        }
+
+        .concierge-option {
+            border: 1px solid var(--line);
+            background: transparent;
+            padding: 22px;
+            text-align: left;
+            transition: .3s;
+        }
+
+        .concierge-option:hover {
+            background: var(--dark);
+            color: white;
+            transform: translateY(-4px);
+        }
+
+        .concierge-option i {
+            color: var(--brown);
+            font-size: 20px;
+        }
+
+        .concierge-option h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 25px;
+            margin-top: 20px;
+            font-weight: 500;
+        }
+
+        /* QUIZ MODAL */
+        .quiz-box {
+            width: min(700px, 100%);
+        }
+
+        .quiz-question {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 38px;
+            margin-top: 20px;
+        }
+
+        .quiz-options {
+            display: grid;
+            gap: 10px;
+            margin: 25px 0;
+        }
+
+        .quiz-option {
+            padding: 16px;
+            border: 1px solid var(--line);
+            background: transparent;
+            text-align: left;
+            transition: .3s;
+        }
+
+        .quiz-option:hover {
+            background: var(--dark);
+            color: white;
+        }
+
+        .quiz-result {
+            display: none;
+            background: var(--dark);
+            color: white;
+            padding: 25px;
+            margin-top: 20px;
+        }
+
+        .quiz-result.show {
+            display: block;
+        }
+
+        .quiz-result h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 35px;
+            font-weight: 500;
+        }
+
+        /* SERVICE DETAIL */
+        .detail-list {
+            margin-top: 25px;
+            display: grid;
+            gap: 10px;
+        }
+
+        .detail-list div {
+            padding: 13px 0;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .detail-list i {
+            color: var(--brown);
+            margin-right: 10px;
+        }
+
+        /* IMAGE PREVIEW */
+        .preview {
+            position: fixed;
+            inset: 0;
+            z-index: 20000;
+            background: rgba(10, 8, 7, .94);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+        }
+
+        .preview.show {
+            display: flex;
+        }
+
+        .preview img {
+            max-width: 90vw;
+            max-height: 85vh;
+            object-fit: contain;
+        }
+
+        .preview-close {
+            position: absolute;
+            top: 25px;
+            right: 30px;
+            color: white;
+            font-size: 28px;
+            cursor: pointer;
+        }
+
+        /* TOAST */
+        .toast {
+            position: fixed;
+            left: 50%;
+            bottom: 30px;
+            transform: translate(-50%, 30px);
+            background: var(--dark);
+            color: white;
+            padding: 14px 22px;
+            border-radius: 40px;
+            opacity: 0;
+            pointer-events: none;
+            transition: .4s;
+            z-index: 30000;
+            font-size: 12px;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translate(-50%, 0);
+        }
+
+        /* TOP BUTTON */
+        .top-btn {
+            position: fixed;
+            right: 25px;
+            bottom: 115px;
+            width: 43px;
+            height: 43px;
+            border: 1px solid var(--line);
+            border-radius: 50%;
+            background: var(--paper);
+            z-index: 3000;
+            opacity: 0;
+            pointer-events: none;
+            transition: .3s;
+        }
+
+        .top-btn.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* RESPONSIVE */
+        @media(max-width:1100px) {
+            .nav-links {
+                display: none;
+            }
+
+            .menu-btn {
+                display: flex;
+            }
+
+            .hero {
+                grid-template-columns: 1fr;
+                padding-top: 140px;
+            }
+
+            .hero-image {
+                height: 580px;
+            }
+
+            .process-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .privilege-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .service-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .experience-hero,
+            .education-intro,
+            .why-grid,
+            .experience-dashboard {
+                grid-template-columns: 1fr;
+            }
+
+            .benefit-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .experience-skills {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media(max-width:750px) {
+            header {
+                padding: 12px 4%;
+            }
+
+            .navbar {
+                padding: 10px 13px;
+            }
+
+            .logo {
+                font-size: 28px;
+            }
+
+            .nav-work {
+                display: none;
+            }
+
+            .hero {
+                padding: 120px 5% 50px;
+                gap: 45px;
+            }
+
+            .hero-copy h1 {
+                font-size: 75px;
+                letter-spacing: -3px;
+            }
+
+            .hero-image {
+                height: 500px;
+                border-radius: 100px 100px 10px 10px;
+            }
+
+            .section-head {
+                display: block;
+            }
+
+            .section-head p {
+                margin-top: 20px;
+            }
+
+            .intro-grid,
+            .about-grid,
+            .digital-grid,
+            .contact-grid,
+            .work-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .feature-grid,
+            .creation-grid,
+            .service-grid,
+            .privilege-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .process-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .process-card {
+                border-left: 0;
+                border-bottom: 1px solid rgba(255, 255, 255, .12);
+            }
+
+            .about-photo {
+                height: 500px;
+            }
+
+            .about-content h2,
+            .contact-left h2 {
+                font-size: 60px;
+            }
+
+            .privilege-box {
+                padding: 40px 25px;
+            }
+
+            .privilege h2 {
+                font-size: 55px;
+            }
+
+            .creation-card,
+            .creation-card.large {
+                min-height: 550px;
+            }
+
+            .skills-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .digital-image {
+                height: 450px;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .contact-form {
+                padding: 28px;
+            }
+
+            .modal-box {
+                padding: 30px 20px;
+            }
+
+            .work-intro,
+            .work-form-area {
+                padding: 35px 25px;
+            }
+
+            .work-intro h2 {
+                font-size: 55px;
+            }
+
+            .service-choices,
+            .concierge-options,
+            .collection-images {
+                grid-template-columns: 1fr;
+            }
+
+            .collection-image {
+                height: 300px;
+            }
+
+            .concierge-float {
+                right: 18px;
+                bottom: 20px;
+            }
+
+            .top-btn {
+                right: 18px;
+                bottom: 105px;
+            }
+
+            .footer-inner {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            /* education + experience mobile */
+            .edu-page {
+                padding: 120px 0 70px;
+            }
+
+            .education-intro h2,
+            .experience-hero h2 {
+                font-size: 60px;
+            }
+
+            .education-line {
+                left: 8px;
+            }
+
+            .education-card,
+            .education-card:nth-child(odd),
+            .education-card:nth-child(even) {
+                width: calc(100% - 30px);
+                margin-left: 30px;
+                margin-right: 0;
+            }
+
+            .education-card::after,
+            .education-card:nth-child(odd)::after,
+            .education-card:nth-child(even)::after {
+                left: -29px;
+                right: auto;
+            }
+
+            .edu-highlight {
+                grid-template-columns: 1fr;
+            }
+
+            .experience-number {
+                font-size: 120px;
+            }
+
+            .benefit-grid,
+            .why-list {
+                grid-template-columns: 1fr;
+            }
+
+            .client-benefits-heading {
+                display: block;
+            }
+
+            .client-benefits-heading h2 {
+                font-size: 52px;
+                margin-bottom: 20px;
+            }
+
+            .why-naaz {
+                padding: 35px 25px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="scroll-progress" id="scrollProgress"></div>
+    <div class="page-transition" id="pageTransition"></div>
+
+    <!-- HEADER -->
+    <header id="header">
+        <div class="navbar">
+            <div class="logo">Naaz<span>.</span></div>
+
+            <div class="nav-links">
+                <button class="nav-btn active" onclick="showPage('home',this)">Home</button>
+                <button class="nav-btn" onclick="showPage('about',this)">About</button>
+                <button class="nav-btn" onclick="showPage('portfolio',this)">Portfolio</button>
+                <button class="nav-btn" onclick="showPage('services',this)">Services</button>
+                <button class="nav-btn" onclick="showPage('skills',this)">Skills</button>
+                <button class="nav-btn" onclick="showPage('digital',this)">Digital</button>
+                <button class="nav-btn" onclick="showPage('education',this)">Education</button>
+                <button class="nav-btn" onclick="showPage('experience',this)">Experience</button>
+            </div>
+
+            <button class="nav-icon" onclick="openConcierge()" title="Style Concierge">
+                <i class="fa-solid fa-wand-magic-sparkles"></i>
+            </button>
+
+            <button class="nav-work" onclick="openWorkModal()">
+                Work With Me
+                <i class="fa-solid fa-arrow-right"></i>
+            </button>
+
+            <button class="nav-icon menu-btn" onclick="toggleMenu()">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- MOBILE MENU -->
+    <div class="mobile-menu" id="mobileMenu">
+        <button onclick="mobileNavigate('home')">Home</button>
+        <button onclick="mobileNavigate('about')">About</button>
+        <button onclick="mobileNavigate('portfolio')">Portfolio</button>
+        <button onclick="mobileNavigate('services')">Services</button>
+        <button onclick="mobileNavigate('skills')">Skills</button>
+        <button onclick="mobileNavigate('digital')">Digital</button>
+        <button onclick="mobileNavigate('education')">Education</button>
+        <button onclick="mobileNavigate('experience')">Experience</button>
+        <button onclick="openWorkFromMobile()">Work With Me</button>
+    </div>
+
+    <!-- HOME -->
+    <section class="page active" id="home">
+
+        <div class="hero">
+            <div class="hero-copy">
+                <div class="eyebrow">Fashion & Creative Studio</div>
+
+                <h1>Wear<br>Your <em>Story.</em></h1>
+
+                <p>
+                    Thoughtfully customized fashion, refined silhouettes and
+                    creative digital design — created with detail, patience
+                    and a distinctly personal touch.
+                </p>
+
+                <div class="hero-actions">
+                    <button class="primary-btn" onclick="showPage('portfolio')">
+                        Explore My Work
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                    <button class="outline-btn" onclick="openWorkModal()">Start A Project</button>
+                </div>
+
+                <div class="hero-meta">
+                    <div class="meta-item"><strong>03+</strong><span>Years Experience</span></div>
+                    <div class="meta-item"><strong>08</strong><span>Fashion Categories</span></div>
+                    <div class="meta-item"><strong>02</strong><span>Creative Fields</span></div>
+                </div>
+            </div>
+
+            <div class="hero-image-wrap">
+                <div class="hero-image">
+                    <img src="https://images.unsplash.com/photo-1539109136881-3be0616acf4b?auto=format&fit=crop&w=1200&q=85"
+                        alt="Fashion design">
+                </div>
+                <div class="hero-tag">Naaz Studio — Fashion / Digital / Detail</div>
+            </div>
+        </div>
+
+        <div class="marquee">
+            <div class="marquee-track">
+                <span>Custom Fashion</span>
+                <span>Bridal Wear</span>
+                <span>Ethnic Silhouettes</span>
+                <span>Creative Design</span>
+                <span>Digital Creativity</span>
+                <span>Custom Fashion</span>
+                <span>Bridal Wear</span>
+                <span>Ethnic Silhouettes</span>
+            </div>
+        </div>
+
+        <div class="intro container">
+            <div class="intro-grid">
+                <div>
+                    <div class="eyebrow">The Philosophy</div>
+                    <h2>Fashion is not just what you wear.</h2>
+                </div>
+                <div class="intro-content">
+                    <p>
+                        It is how you express yourself. My approach combines
+                        fashion customization with creative digital design to
+                        create work that feels elegant, individual and meaningful.
+                    </p>
+                </div>
+            </div>
+
+            <div class="feature-grid">
+                <div class="feature-card" onclick="openServiceDetail('custom')">
+                    <div class="number">01</div>
+                    <i class="fa-solid fa-scissors"></i>
+                    <h3>Custom Design</h3>
+                </div>
+                <div class="feature-card" onclick="openServiceDetail('creative')">
+                    <div class="number">02</div>
+                    <i class="fa-solid fa-gem"></i>
+                    <h3>Creative Detail</h3>
+                </div>
+                <div class="feature-card" onclick="openServiceDetail('digital')">
+                    <div class="number">03</div>
+                    <i class="fa-solid fa-pen-nib"></i>
+                    <h3>Digital Creativity</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="process">
+            <div class="container">
+                <div class="eyebrow">How We Create</div>
+                <h2>From idea<br>to identity.</h2>
+
+                <div class="process-grid">
+                    <div class="process-card" onclick="openProcess('Understand')">
+                        <span>01</span>
+                        <i class="fa-regular fa-comments"></i>
+                        <h3>Understand</h3>
+                        <p>Your idea, occasion, style and requirements come first.</p>
+                    </div>
+                    <div class="process-card" onclick="openProcess('Design')">
+                        <span>02</span>
+                        <i class="fa-solid fa-pencil"></i>
+                        <h3>Design</h3>
+                        <p>The concept is shaped into a visual direction.</p>
+                    </div>
+                    <div class="process-card" onclick="openProcess('Detail')">
+                        <span>03</span>
+                        <i class="fa-solid fa-sparkles"></i>
+                        <h3>Detail</h3>
+                        <p>Fabrics, colours, silhouettes and finishing are refined.</p>
+                    </div>
+                    <div class="process-card" onclick="openProcess('Complete')">
+                        <span>04</span>
+                        <i class="fa-solid fa-check"></i>
+                        <h3>Complete</h3>
+                        <p>The final creative direction comes together.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="privilege">
+            <div class="container">
+                <div class="privilege-box">
+                    <div class="privilege-content">
+                        <div class="eyebrow">A Little Extra</div>
+                        <h2>The Naaz<br>Privilege.</h2>
+                        <p>
+                            Explore a few interactive tools designed to make your
+                            visit easier — discover your style direction, explore
+                            collections or prepare your project idea before reaching out.
+                        </p>
+                    </div>
+
+                    <div class="privilege-grid">
+                        <button class="privilege-item" onclick="startStyleQuiz()">
+                            <i class="fa-solid fa-wand-magic-sparkles"></i>
+                            <h3>Style Finder</h3>
+                        </button>
+                        <button class="privilege-item" onclick="openCollection('bridal')">
+                            <i class="fa-solid fa-images"></i>
+                            <h3>Collection Explorer</h3>
+                        </button>
+                        <button class="privilege-item" onclick="openClientBrief()">
+                            <i class="fa-solid fa-file-lines"></i>
+                            <h3>Client Brief</h3>
+                        </button>
+                        <button class="privilege-item" onclick="openWorkModal()">
+                            <i class="fa-solid fa-envelope-open-text"></i>
+                            <h3>Private Inquiry</h3>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+    <!-- ABOUT -->
+    <section class="page" id="about">
+        <div class="about container">
+            <div class="about-grid">
+                <div class="about-photo">
+                    <img src="my photo.jpeg" alt="Nazia">
+                </div>
+
+                <div class="about-content">
+                    <div class="eyebrow">About Me</div>
+
+                    <h2>Hello,<br>I'm <span>Nazia.</span></h2>
+
+                    <p>
+                        Fashion designing has been an interest of mine since childhood.
+                        I enjoy creating unique and elegant outfits while experimenting
+                        with fabrics, colours, silhouettes and detailing.
+                    </p>
+
+                    <br>
+
+                    <p>
+                        My work includes customized dresses, alterations, sketching,
+                        fabric selection, bridal wear, ethnic wear, casual wear,
+                        western wear and Indo-western styles.
+                    </p>
+
+                    <div class="about-points">
+                        <div class="about-point" onclick="showToast('Creativity is at the heart of every concept.')">
+                            <strong>Creative</strong>
+                            <p>Ideas with an individual point of view.</p>
+                        </div>
+                        <div class="about-point" onclick="showToast('Every detail matters.')">
+                            <strong>Detail Focused</strong>
+                            <p>Attention to finishing and visual balance.</p>
+                        </div>
+                        <div class="about-point" onclick="showToast('Patience helps turn an idea into design.')">
+                            <strong>Patient</strong>
+                            <p>Careful process from idea to execution.</p>
+                        </div>
+                        <div class="about-point"
+                            onclick="showToast('Analytical thinking supports practical design decisions.')">
+                            <strong>Analytical</strong>
+                            <p>Understanding requirements before creating.</p>
+                        </div>
+                    </div>
+
+                    <br>
+
+                    <button class="primary-btn" onclick="openWorkModal()">
+                        Let's Create Together
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PORTFOLIO -->
+    <section class="page" id="portfolio">
+        <div class="portfolio container">
+
+            <div class="section-head">
+                <div>
+                    <div class="eyebrow">Selected Creations</div>
+                    <h2>A wardrobe<br>of ideas.</h2>
+                </div>
+                <p>
+                    Explore different fashion directions. Each category opens
+                    its own collection so you can view related visual references.
+                </p>
+            </div>
+
+            <div class="creation-grid">
+
+                <div class="creation-card large" onclick="openCollection('bridal')">
+                    <img
+                        src="https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=1000&q=85">
+                    <div class="creation-info">
+                        <small>01 — COLLECTION</small>
+                        <h3>Bridal Wear</h3>
+                        <button class="collection-btn">Explore Related Collection</button>
+                    </div>
+                </div>
+
+                <div class="creation-card" onclick="openCollection('custom')">
+                    <img
+                        src="https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=1000&q=85">
+                    <div class="creation-info">
+                        <small>02 — COLLECTION</small>
+                        <h3>Customized Wear</h3>
+                        <button class="collection-btn">Explore Related Collection</button>
+                    </div>
+                </div>
+
+                <div class="creation-card" onclick="openCollection('mens')">
+                    <img
+                        src="https://images.unsplash.com/photo-1617137968427-85924c800a22?auto=format&fit=crop&w=1000&q=85">
+                    <div class="creation-info">
+                        <small>03 — COLLECTION</small>
+                        <h3>Men's Wear</h3>
+                        <button class="collection-btn">Explore Related Collection</button>
+                    </div>
+                </div>
+
+                <div class="creation-card large" onclick="openCollection('creative')">
+                    <img
+                        src="https://images.unsplash.com/photo-1485230895905-ec40ba36b9bc?auto=format&fit=crop&w=1000&q=85">
+                    <div class="creation-info">
+                        <small>04 — COLLECTION</small>
+                        <h3>Creative Wear</h3>
+                        <button class="collection-btn">Explore Related Collection</button>
+                    </div>
+                </div>
+
+                <div class="creation-card" onclick="openCollection('ethnic')">
+                    <img
+                        src="https://images.unsplash.com/photo-1583391733956-6c78276477e2?auto=format&fit=crop&w=1000&q=85">
+                    <div class="creation-info">
+                        <small>05 — COLLECTION</small>
+                        <h3>Ethnic Wear</h3>
+                        <button class="collection-btn">Explore Related Collection</button>
+                    </div>
+                </div>
+
+                <div class="creation-card" onclick="openCollection('casual')">
+                    <img
+                        src="https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=1000&q=85">
+                    <div class="creation-info">
+                        <small>06 — COLLECTION</small>
+                        <h3>Casual Wear</h3>
+                        <button class="collection-btn">Explore Related Collection</button>
+                    </div>
+                </div>
+
+                <div class="creation-card large" onclick="openCollection('party')">
+                    <img
+                        src="https://images.unsplash.com/photo-1566174053879-31528523f8ae?auto=format&fit=crop&w=1000&q=85">
+                    <div class="creation-info">
+                        <small>07 — COLLECTION</small>
+                        <h3>Party Wear</h3>
+                        <button class="collection-btn">Explore Related Collection</button>
+                    </div>
+                </div>
+
+                <div class="creation-card" onclick="openCollection('western')">
+                    <img
+                        src="https://images.unsplash.com/photo-1539008835657-9e8e9680c956?auto=format&fit=crop&w=1000&q=85">
+                    <div class="creation-info">
+                        <small>08 — COLLECTION</small>
+                        <h3>Western Wear</h3>
+                        <button class="collection-btn">Explore Related Collection</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- SERVICES -->
+    <section class="page" id="services">
+        <div class="services">
+            <div class="container">
+
+                <div class="section-head">
+                    <div>
+                        <div class="eyebrow">Services</div>
+                        <h2>What I<br>Create.</h2>
+                    </div>
+                    <p>Choose a service to explore what the creative process can include.</p>
+                </div>
+
+                <div class="service-grid">
+                    <div class="service-card" onclick="openServiceDetail('custom')">
+                        <span class="service-no">01</span>
+                        <i class="fa-solid fa-scissors"></i>
+                        <h3>Dress Customization</h3>
+                        <p>Personalized silhouettes designed around your requirements.</p>
+                    </div>
+                    <div class="service-card" onclick="openServiceDetail('bridal')">
+                        <span class="service-no">02</span>
+                        <i class="fa-solid fa-crown"></i>
+                        <h3>Bridal Wear</h3>
+                        <p>Elegant bridal directions with attention to detail.</p>
+                    </div>
+                    <div class="service-card" onclick="openServiceDetail('ethnic')">
+                        <span class="service-no">03</span>
+                        <i class="fa-solid fa-feather"></i>
+                        <h3>Ethnic Wear</h3>
+                        <p>Traditional influences with a contemporary finish.</p>
+                    </div>
+                    <div class="service-card" onclick="openServiceDetail('sketch')">
+                        <span class="service-no">04</span>
+                        <i class="fa-solid fa-pencil"></i>
+                        <h3>Fashion Sketching</h3>
+                        <p>Visual concepts and outfit ideas before execution.</p>
+                    </div>
+                    <div class="service-card" onclick="openServiceDetail('graphic')">
+                        <span class="service-no">05</span>
+                        <i class="fa-solid fa-pen-nib"></i>
+                        <h3>Graphic Design</h3>
+                        <p>Creative visual material for fashion and business needs.</p>
+                    </div>
+                    <div class="service-card" onclick="openServiceDetail('social')">
+                        <span class="service-no">06</span>
+                        <i class="fa-brands fa-instagram"></i>
+                        <h3>Social Media Design</h3>
+                        <p>Clean digital creatives for social platforms.</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- SKILLS -->
+    <section class="page" id="skills">
+        <div class="skills container">
+
+            <div class="section-head">
+                <div>
+                    <div class="eyebrow">Capabilities</div>
+                    <h2>Skills<br>& Craft.</h2>
+                </div>
+                <p>A combination of hands-on fashion work and digital creative skills.</p>
+            </div>
+
+            <div class="skills-grid">
+
+                <div class="skill-group">
+                    <h3>Fashion</h3>
+
+                    <div class="skill" onclick="showToast('Dress Customization — strong focus area.')">
+                        <div class="skill-top"><span>Dress Customization</span><strong>90%</strong></div>
+                        <div class="skill-bar">
+                            <div class="skill-fill" data-width="90"></div>
+                        </div>
+                    </div>
+                    <div class="skill" onclick="showToast('Fashion Styling — creative styling and coordination.')">
+                        <div class="skill-top"><span>Fashion Styling</span><strong>85%</strong></div>
+                        <div class="skill-bar">
+                            <div class="skill-fill" data-width="85"></div>
+                        </div>
+                    </div>
+                    <div class="skill" onclick="showToast('Fashion Sketching — concept visualization.')">
+                        <div class="skill-top"><span>Fashion Sketching</span><strong>82%</strong></div>
+                        <div class="skill-bar">
+                            <div class="skill-fill" data-width="82"></div>
+                        </div>
+                    </div>
+                    <div class="skill"
+                        onclick="showToast('Fabric Selection — choosing materials according to design.')">
+                        <div class="skill-top"><span>Fabric Selection</span><strong>88%</strong></div>
+                        <div class="skill-bar">
+                            <div class="skill-fill" data-width="88"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="skill-group">
+                    <h3>Digital</h3>
+
+                    <div class="skill" onclick="showToast('Canva — digital design and content creation.')">
+                        <div class="skill-top"><span>Canva</span><strong>90%</strong></div>
+                        <div class="skill-bar">
+                            <div class="skill-fill" data-width="90"></div>
+                        </div>
+                    </div>
+                    <div class="skill" onclick="showToast('Photoshop — creative image and design editing.')">
+                        <div class="skill-top"><span>Photoshop</span><strong>82%</strong></div>
+                        <div class="skill-bar">
+                            <div class="skill-fill" data-width="82"></div>
+                        </div>
+                    </div>
+                    <div class="skill" onclick="showToast('Content Creation — visual content development.')">
+                        <div class="skill-top"><span>Content Creation</span><strong>80%</strong></div>
+                        <div class="skill-bar">
+                            <div class="skill-fill" data-width="80"></div>
+                        </div>
+                    </div>
+                    <div class="skill" onclick="showToast('Social Media Design — platform-ready creative design.')">
+                        <div class="skill-top"><span>Social Media Design</span><strong>78%</strong></div>
+                        <div class="skill-bar">
+                            <div class="skill-fill" data-width="78"></div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- DIGITAL -->
+    <section class="page" id="digital">
+        <div class="digital">
+            <div class="container">
+                <div class="digital-grid">
+
+                    <div class="digital-image">
+                        <img
+                            src="https://images.unsplash.com/photo-1558655146-d09347e92766?auto=format&fit=crop&w=1000&q=85">
+                    </div>
+
+                    <div>
+                        <div class="eyebrow">Digital Creative</div>
+
+                        <h2 class="modal-title">Beyond<br>Fashion.</h2>
+
+                        <p class="modal-description">
+                            Alongside fashion work, I create digital visuals for brands,
+                            businesses and creative projects.
+                        </p>
+
+                        <div class="digital-list">
+                            <button onclick="openServiceDetail('graphic')"><i class="fa-solid fa-palette"></i>
+                                Canva</button>
+                            <button onclick="openServiceDetail('graphic')"><i class="fa-solid fa-image"></i>
+                                Photoshop</button>
+                            <button onclick="openServiceDetail('graphic')"><i class="fa-solid fa-file"></i>
+                                Pamphlets</button>
+                            <button onclick="openServiceDetail('graphic')"><i class="fa-solid fa-book-open"></i>
+                                Brochures</button>
+                            <button onclick="openServiceDetail('graphic')"><i class="fa-solid fa-address-card"></i>
+                                Visiting Cards</button>
+                            <button onclick="openServiceDetail('graphic')"><i class="fa-solid fa-utensils"></i> Menu
+                                Designs</button>
+                            <button onclick="openServiceDetail('graphic')"><i class="fa-solid fa-rectangle-ad"></i>
+                                Banner Design</button>
+                            <button onclick="openServiceDetail('social')"><i class="fa-brands fa-instagram"></i> Social
+                                Content</button>
+                        </div>
+
+                        <br>
+
+                        <button class="primary-btn" onclick="openWorkModal('graphic')">
+                            Discuss A Digital Project
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- EDUCATION (from first code) -->
+    <section class="page" id="education">
+        <div class="edu-page">
+            <div class="container">
+
+                <div class="education-intro">
+                    <div>
+                        <div class="eyebrow">Academic Journey</div>
+                        <h2>Learning<br><span>With Purpose.</span></h2>
+                    </div>
+                    <p>
+                        My education has developed my communication, analytical and
+                        creative thinking while my fashion diploma gave me a practical
+                        foundation in fashion designing. Click any qualification to
+                        explore the details.
+                    </p>
+                </div>
+
+                <div class="education-stage">
+                    <div class="education-line"></div>
+
+                    <div class="education-card" onclick="openEducation('10th')">
+                        <div class="edu-top">
+                            <div class="edu-year">2019</div>
+                            <div class="edu-badge">Foundation</div>
+                        </div>
+                        <h3>10th — Secondary Education</h3>
+                        <p>Sushila Inter College</p>
+                        <div class="edu-click">View Details <i class="fa-solid fa-arrow-right"></i></div>
+                    </div>
+
+                    <div class="education-card" onclick="openEducation('12th')">
+                        <div class="edu-top">
+                            <div class="edu-year">2021</div>
+                            <div class="edu-badge">Higher Secondary</div>
+                        </div>
+                        <h3>12th — Senior Secondary</h3>
+                        <p>Sushila Inter College</p>
+                        <div class="edu-click">View Details <i class="fa-solid fa-arrow-right"></i></div>
+                    </div>
+
+                    <div class="education-card" onclick="openEducation('Diploma')">
+                        <div class="edu-top">
+                            <div class="edu-year">2024</div>
+                            <div class="edu-badge">Fashion</div>
+                        </div>
+                        <h3>Diploma in Fashion Designing</h3>
+                        <p>Fashion Designing • Completed</p>
+                        <div class="edu-click">View Details <i class="fa-solid fa-arrow-right"></i></div>
+                    </div>
+
+                    <div class="education-card" onclick="openEducation('BA')">
+                        <div class="edu-top">
+                            <div class="edu-year">2026</div>
+                            <div class="edu-badge">Graduate</div>
+                        </div>
+                        <h3>B.A. — CCSU</h3>
+                        <p>English • Philosophy • Political Science</p>
+                        <div class="edu-click">View Details <i class="fa-solid fa-arrow-right"></i></div>
+                    </div>
+                </div>
+
+                <div class="edu-highlight">
+                    <div class="edu-highlight-icon"><i class="fa-solid fa-graduation-cap"></i></div>
+                    <div>
+                        <h3>Creative + Academic Thinking</h3>
+                        <p>My academic background and fashion education come together in the way I approach creative
+                            projects.</p>
+                    </div>
+                    <button onclick="openEducation('BA')">Explore</button>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- EXPERIENCE (from first code) -->
+    <section class="page" id="experience">
+        <div class="edu-page">
+            <div class="container">
+
+                <div class="experience-hero">
+                    <div>
+                        <div class="experience-number">03+</div>
+                        <div class="experience-label">Years of Practical Experience</div>
+                    </div>
+                    <div>
+                        <div class="eyebrow">Experience</div>
+                        <h2>Built Through<br><span>Real Work.</span></h2>
+                        <p>
+                            My experience comes from practical fashion and boutique work,
+                            including customization, alterations, styling, fabric selection
+                            and creating designs according to individual requirements.
+                            This hands-on experience has taught me that every client and
+                            every outfit needs a slightly different approach.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="experience-dashboard">
+                    <div class="experience-main">
+                        <div class="exp-label">Professional Experience</div>
+                        <h3>Home-Based Boutique<br>& Fashion Work</h3>
+                        <p>
+                            Self-employed fashion work focused on customized clothing,
+                            client requirements, garment alterations and creative
+                            fashion solutions.
+                        </p>
+                        <div class="exp-stats">
+                            <div class="exp-stat"><strong>03+</strong><span>Years Practical Work</span></div>
+                            <div class="exp-stat"><strong>08</strong><span>Fashion Categories</span></div>
+                            <div class="exp-stat"><strong>01:01</strong><span>Personal Client Approach</span></div>
+                            <div class="exp-stat"><strong>02</strong><span>Creative Fields</span></div>
+                        </div>
+                    </div>
+
+                    <div class="experience-side">
+                        <div class="exp-interactive" onclick="openExperienceDetail('Client Work')">
+                            <i class="fa-solid fa-user-check"></i>
+                            <h4>Client-Focused Work</h4>
+                            <p>Click to explore how a project is handled from requirement to final direction.</p>
+                        </div>
+                        <div class="exp-interactive" onclick="openExperienceDetail('Fashion Work')">
+                            <i class="fa-solid fa-shirt"></i>
+                            <h4>Fashion Experience</h4>
+                            <p>Explore the practical areas covered through boutique work.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="experience-skills">
+                    <div class="exp-skill" onclick="openExperienceDetail('Customization')"><i
+                            class="fa-solid fa-scissors"></i><span>Customization</span></div>
+                    <div class="exp-skill" onclick="openExperienceDetail('Alteration')"><i
+                            class="fa-solid fa-ruler-combined"></i><span>Alteration</span></div>
+                    <div class="exp-skill" onclick="openExperienceDetail('Fabric')"><i
+                            class="fa-solid fa-layer-group"></i><span>Fabric Selection</span></div>
+                    <div class="exp-skill" onclick="openExperienceDetail('Styling')"><i
+                            class="fa-solid fa-wand-magic-sparkles"></i><span>Styling</span></div>
+                </div>
+
+                <div class="client-benefits">
+                    <div class="client-benefits-heading">
+                        <div>
+                            <div class="eyebrow">For My Clients</div>
+                            <h2>Your Project Comes With<br><span>Extra Value.</span></h2>
+                        </div>
+                        <p>
+                            When you work with Naaz, the goal is not simply to deliver
+                            a service. Wherever applicable, I also provide small
+                            complimentary benefits to make your project easier and more personal.
+                        </p>
+                    </div>
+
+                    <div class="benefit-grid">
+                        <div class="benefit-card" onclick="openBenefit('Free Style Consultation')">
+                            <span class="free">Complimentary</span>
+                            <div class="benefit-icon"><i class="fa-solid fa-comments"></i></div>
+                            <h3>Style Consultation</h3>
+                            <p>Discuss your occasion, preferences and desired style before finalizing the creative
+                                direction.</p>
+                        </div>
+                        <div class="benefit-card" onclick="openBenefit('Colour & Fabric Guidance')">
+                            <span class="free">Complimentary</span>
+                            <div class="benefit-icon"><i class="fa-solid fa-palette"></i></div>
+                            <h3>Colour & Fabric Guidance</h3>
+                            <p>Helpful suggestions based on the outfit, occasion and overall look you want to achieve.
+                            </p>
+                        </div>
+                        <div class="benefit-card" onclick="openBenefit('Basic Design Direction')">
+                            <span class="free">Complimentary</span>
+                            <div class="benefit-icon"><i class="fa-solid fa-lightbulb"></i></div>
+                            <h3>Design Direction</h3>
+                            <p>A clear starting direction to help turn your idea into a more organized project concept.
+                            </p>
+                        </div>
+                        <div class="benefit-card" onclick="openBenefit('Personalized Project Brief')">
+                            <span class="free">Complimentary</span>
+                            <div class="benefit-icon"><i class="fa-solid fa-file-lines"></i></div>
+                            <h3>Project Brief</h3>
+                            <p>Your requirements can be organized into a simple brief so both sides understand the
+                                project clearly.</p>
+                        </div>
+                        <div class="benefit-card" onclick="openBenefit('Digital Preview')">
+                            <span class="free">Where Applicable</span>
+                            <div class="benefit-icon"><i class="fa-solid fa-image"></i></div>
+                            <h3>Initial Preview</h3>
+                            <p>For suitable digital or design projects, an initial visual direction can be discussed
+                                before the final work.</p>
+                        </div>
+                        <div class="benefit-card" onclick="openBenefit('WhatsApp Project Support')">
+                            <span class="free">Included</span>
+                            <div class="benefit-icon"><i class="fa-brands fa-whatsapp"></i></div>
+                            <h3>Easy Communication</h3>
+                            <p>Project discussions can be continued through WhatsApp for convenient communication.</p>
+                        </div>
+                        <div class="benefit-card" onclick="openBenefit('Revision Guidance')">
+                            <span class="free">Project Based</span>
+                            <div class="benefit-icon"><i class="fa-solid fa-arrows-rotate"></i></div>
+                            <h3>Refinement Support</h3>
+                            <p>Agreed project revisions can be handled with a clear, organized refinement process.</p>
+                        </div>
+                        <div class="benefit-card" onclick="openBenefit('Returning Client Benefit')">
+                            <span class="free">Loyalty</span>
+                            <div class="benefit-icon"><i class="fa-solid fa-heart"></i></div>
+                            <h3>Returning Client Care</h3>
+                            <p>Returning clients can receive personalized attention for future projects.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="why-naaz">
+                    <div class="why-grid">
+                        <div>
+                            <div class="eyebrow">The Experience</div>
+                            <h2>Why Work<br>With <span>Naaz?</span></h2>
+                        </div>
+                        <div class="why-list">
+                            <div class="why-item" onclick="openWhy('Personalized Approach')">
+                                <i class="fa-solid fa-fingerprint"></i>
+                                <h4>Personalized Approach</h4>
+                                <p>Your requirements remain at the centre of the project.</p>
+                            </div>
+                            <div class="why-item" onclick="openWhy('Attention to Detail')">
+                                <i class="fa-solid fa-gem"></i>
+                                <h4>Attention to Detail</h4>
+                                <p>Details, finishing and visual consistency matter.</p>
+                            </div>
+                            <div class="why-item" onclick="openWhy('Fashion + Digital')">
+                                <i class="fa-solid fa-layer-group"></i>
+                                <h4>Fashion + Digital</h4>
+                                <p>Two creative skill areas under one portfolio.</p>
+                            </div>
+                            <div class="why-item" onclick="openWhy('Clear Communication')">
+                                <i class="fa-solid fa-message"></i>
+                                <h4>Clear Communication</h4>
+                                <p>Ideas and requirements are discussed before execution.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section class="page" id="contact">
+        <div class="contact container">
+            <div class="contact-grid">
+
+                <div class="contact-left">
+                    <div class="eyebrow">Let's Connect</div>
+                    <h2>Have an<br>idea?</h2>
+                    <p>
+                        Tell me what you are planning and we can explore the
+                        right creative direction together.
+                    </p>
+
+                    <div class="contact-details">
+                        <div class="contact-detail"><small>Location</small><strong>Ghaziabad, India</strong></div>
+                        <div class="contact-detail"><small>Phone</small><strong>+91 8860390867</strong></div>
+                        <div class="contact-detail"><small>Email</small><strong>naziya10saifi@gmail.com</strong></div>
+                        <div class="contact-detail"><small>Instagram</small><strong>@naaz</strong></div>
+                    </div>
+                </div>
+
+                <div class="contact-form">
+                    <form onsubmit="submitContact(event)">
+
+                        <div class="form-row">
+                            <div class="field">
+                                <label>Name</label>
+                                <input id="contactName" required>
+                            </div>
+                            <div class="field">
+                                <label>Email</label>
+                                <input type="email" id="contactEmail" required>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <label>Service</label>
+                            <select id="contactService" required>
+                                <option value="">Select a service</option>
+                                <option>Dress Customization</option>
+                                <option>Bridal Wear</option>
+                                <option>Ethnic Wear</option>
+                                <option>Fashion Sketching</option>
+                                <option>Graphic Design</option>
+                                <option>Social Media Design</option>
+                            </select>
+                        </div>
+
+                        <div class="field">
+                            <label>Message</label>
+                            <textarea id="contactMessage" placeholder="Tell me a little about your idea..."
+                                required></textarea>
+                        </div>
+
+                        <button class="primary-btn" type="submit">
+                            Send Inquiry
+                            <i class="fa-solid fa-paper-plane"></i>
+                        </button>
+
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-inner">
+            <div>
+                <div class="footer-logo">Naaz<span>.</span></div>
+                <small>Fashion • Customization • Digital Creativity</small>
+            </div>
+
+            <div class="footer-social">
+                <a href="#" onclick="showToast('Instagram profile link can be added here.')"><i
+                        class="fa-brands fa-instagram"></i></a>
+                <a href="#" onclick="showToast('LinkedIn profile link can be added here.')"><i
+                        class="fa-brands fa-linkedin-in"></i></a>
+                <a href="https://wa.me/918860390867" target="_blank"><i class="fa-brands fa-whatsapp"></i></a>
+            </div>
+
+            <div><small>© 2026 Naaz Studio</small></div>
+        </div>
+    </footer>
+
+    <!-- FLOATING BUTTONS -->
+    <button class="concierge-float" onclick="openConcierge()" title="Style Concierge">
+        <i class="fa-solid fa-wand-magic-sparkles"></i>
+    </button>
+
+    <button class="top-btn" id="topBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+        <i class="fa-solid fa-arrow-up"></i>
+    </button>
+
+    <!-- COLLECTION MODAL -->
+    <div class="modal" id="collectionModal">
+        <div class="modal-box">
+            <button class="modal-close" onclick="closeModal('collectionModal')"><i
+                    class="fa-solid fa-xmark"></i></button>
+            <div class="eyebrow" id="collectionEyebrow">Naaz Collection</div>
+            <h2 class="modal-title" id="collectionTitle">Collection</h2>
+            <p class="modal-description" id="collectionDescription"></p>
+            <div class="collection-images" id="collectionImages"></div>
+            <br>
+            <button class="primary-btn" onclick="openWorkModal()">
+                Request This Style
+                <i class="fa-solid fa-arrow-right"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- WORK WITH ME MODAL -->
+    <div class="modal" id="workModal">
+        <div class="modal-box work-box">
+            <button class="modal-close" onclick="closeModal('workModal')"><i class="fa-solid fa-xmark"></i></button>
+
+            <div class="work-layout">
+
+                <div class="work-intro">
+                    <div class="eyebrow">Private Project Inquiry</div>
+                    <h2>Let's create<br>something<br>personal.</h2>
+                    <p>
+                        Share a few details about your idea. This helps me understand
+                        your requirement before we begin the conversation.
+                    </p>
+                    <div class="work-steps">
+                        <div class="work-step"><span>01</span>
+                            <div>Choose your creative service</div>
+                        </div>
+                        <div class="work-step"><span>02</span>
+                            <div>Share your project direction</div>
+                        </div>
+                        <div class="work-step"><span>03</span>
+                            <div>Discuss the next step</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="work-form-area">
+                    <h3>Tell me about your project.</h3>
+
+                    <div class="service-choices">
+                        <button class="service-choice" onclick="selectWorkService(this,'Dress Customization')"><i
+                                class="fa-solid fa-scissors"></i> Dress Customization</button>
+                        <button class="service-choice" onclick="selectWorkService(this,'Bridal Wear')"><i
+                                class="fa-solid fa-crown"></i> Bridal Wear</button>
+                        <button class="service-choice" onclick="selectWorkService(this,'Ethnic Wear')"><i
+                                class="fa-solid fa-feather"></i> Ethnic Wear</button>
+                        <button class="service-choice" onclick="selectWorkService(this,'Fashion Sketching')"><i
+                                class="fa-solid fa-pencil"></i> Fashion Sketching</button>
+                        <button class="service-choice" onclick="selectWorkService(this,'Graphic Design')"><i
+                                class="fa-solid fa-pen-nib"></i> Graphic Design</button>
+                        <button class="service-choice" onclick="selectWorkService(this,'Social Media Design')"><i
+                                class="fa-brands fa-instagram"></i> Social Media</button>
+                    </div>
+
+                    <form onsubmit="submitWorkForm(event)">
+                        <input type="hidden" id="selectedWorkService">
+
+                        <div class="form-row">
+                            <div class="field">
+                                <label>Your Name</label>
+                                <input id="workName" required>
+                            </div>
+                            <div class="field">
+                                <label>Email</label>
+                                <input type="email" id="workEmail" required>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="field">
+                                <label>Project Type</label>
+                                <select id="workType">
+                                    <option>Personal</option>
+                                    <option>Fashion Brand</option>
+                                    <option>Business</option>
+                                    <option>Social Media</option>
+                                    <option>Other</option>
+                                </select>
+                            </div>
+                            <div class="field">
+                                <label>Approx. Budget</label>
+                                <select id="workBudget">
+                                    <option>Not decided yet</option>
+                                    <option>Under ₹5,000</option>
+                                    <option>₹5,000 – ₹10,000</option>
+                                    <option>₹10,000 – ₹20,000</option>
+                                    <option>₹20,000+</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <label>Project Message</label>
+                            <textarea id="workMessage" placeholder="What would you like to create?" required></textarea>
+                        </div>
+
+                        <button class="primary-btn" type="submit">
+                            Continue With WhatsApp
+                            <i class="fa-brands fa-whatsapp"></i>
+                        </button>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- CONCIERGE MODAL -->
+    <div class="modal" id="conciergeModal">
+        <div class="modal-box concierge-box">
+            <button class="modal-close" onclick="closeModal('conciergeModal')"><i
+                    class="fa-solid fa-xmark"></i></button>
+            <div class="eyebrow">Your Style Concierge</div>
+            <h2 class="modal-title">Where would you<br>like to begin?</h2>
+            <p class="modal-description">
+                Use the quick tools below to explore the studio without
+                having to search through the whole website.
+            </p>
+
+            <div class="concierge-options">
+                <button class="concierge-option" onclick="startStyleQuiz()">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i>
+                    <h3>Find My Style</h3>
+                </button>
+                <button class="concierge-option" onclick="showPage('portfolio');closeModal('conciergeModal')">
+                    <i class="fa-solid fa-images"></i>
+                    <h3>Explore Portfolio</h3>
+                </button>
+                <button class="concierge-option" onclick="showPage('services');closeModal('conciergeModal')">
+                    <i class="fa-solid fa-scissors"></i>
+                    <h3>View Services</h3>
+                </button>
+                <button class="concierge-option" onclick="openWorkModal()">
+                    <i class="fa-solid fa-message"></i>
+                    <h3>Start A Project</h3>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- STYLE QUIZ -->
+    <div class="modal" id="quizModal">
+        <div class="modal-box quiz-box">
+            <button class="modal-close" onclick="closeModal('quizModal')"><i class="fa-solid fa-xmark"></i></button>
+            <div class="eyebrow">Style Finder</div>
+            <h2 class="modal-title">Let's discover<br>your direction.</h2>
+
+            <div id="quizArea">
+                <div class="quiz-question" id="quizQuestion"></div>
+                <div class="quiz-options" id="quizOptions"></div>
+            </div>
+
+            <div class="quiz-result" id="quizResult">
+                <div class="eyebrow">Your Direction</div>
+                <h3 id="quizResultTitle"></h3>
+                <p id="quizResultText"></p>
+                <br>
+                <button class="primary-btn" onclick="openWorkModal()">
+                    Discuss This Direction
+                    <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- SERVICE DETAIL MODAL -->
+    <div class="modal" id="detailModal">
+        <div class="modal-box">
+            <button class="modal-close" onclick="closeModal('detailModal')"><i class="fa-solid fa-xmark"></i></button>
+            <div class="eyebrow" id="detailEyebrow">Service</div>
+            <h2 class="modal-title" id="detailTitle">Service</h2>
+            <p class="modal-description" id="detailDescription"></p>
+            <div class="detail-list" id="detailList"></div>
+            <br>
+            <button class="primary-btn" id="detailWorkBtn">
+                Discuss This Service
+                <i class="fa-solid fa-arrow-right"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- GENERIC INFO MODAL -->
+    <div class="modal" id="infoModal">
+        <div class="modal-box">
+            <button class="modal-close" onclick="closeModal('infoModal')"><i class="fa-solid fa-xmark"></i></button>
+            <div class="eyebrow" id="infoEyebrow">Naaz Studio</div>
+            <h2 class="modal-title" id="infoTitle"></h2>
+            <p class="modal-description" id="infoText"></p>
+            <div id="infoExtra"></div>
+            <br>
+            <button class="primary-btn" onclick="closeModal('infoModal')">
+                Continue Exploring
+                <i class="fa-solid fa-arrow-right"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- IMAGE PREVIEW -->
+    <div class="preview" id="imagePreview">
+        <div class="preview-close" onclick="closePreview()"><i class="fa-solid fa-xmark"></i></div>
+        <img id="previewImage" src="" alt="Preview">
+    </div>
+
+    <div class="toast" id="toast">Message</div>
+
+    <script>
+
+        /* COLLECTION DATA */
+
+        const collections = {
+
+            bridal: {
+                title: "Bridal Wear",
+                description: "Elegant bridal directions focused on silhouette, detailing and occasion.",
+                images: [
+                    "https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=900&q=85",
+                    "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=900&q=85",
+                    "https://images.unsplash.com/photo-1606800052052-a08af7148866?auto=format&fit=crop&w=900&q=85",
+                    "https://images.unsplash.com/photo-1544078751-58fee2d8a03b?auto=format&fit=crop&w=900&q=85",
+                    "https://images.unsplash.com/photo-1594552072238-b8a33785b261?auto=format&fit=crop&w=900&q=85",
+                    "https://images.unsplash.com/photo-1606800052052-a08af7148866?auto=format&fit=crop&w=900&q=85"
+                ]
+            },
+
+            custom: {
+                title: "Customized Wear",
+                description: "Personalized fashion built around individual preferences, fit and occasion.",
+                images: [
+                    "https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=900&q=85",
+                    "https://images.unsplash.com/photo-1496747611176-843222e1e57c?auto=format&fit=crop&w=900&q=85",
+                    "https://images.unsplash.com/photo-1539109136881-3be0616acf4b?auto=format&fit=crop&w=900&q=85",
+                    "https://images.unsplash.com/photo-1485968579580-b6d095142e6e?auto=format&fit=crop&w=900&q=85",
+                    "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=900&q=85",
+                    "https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&w=900&q=85"
+                ]
+            },
+
+            mens: {
+                title: "Men's Wear",
+                description: "Clean, refined menswear directions with attention to proportion and styling.",
+                images: [
+                    "https://images.unsplash.com/photo-1617137968427-85924c800a22?auto=format&fit=crop&w=900&q=85",
+                    "https://images.unsplash.com/photo-1598808503746-f34c53b9323e?auto=format&fit=crop&w=900&q=85",
+                    "https://images.unsplash.com/photo-1610652492500-ded49ceeb378?auto=format&fit=crop&w=900&q=85",
+                    "https://images.unsplash.com/photo-1555069519-127aadedf1ee?auto=format&fit=crop&w=900&q=85",
+                    "https://images.unsplash.com/photo-1610652492500-ded49ceeb378?auto=format&fit=crop&w=900&q=85",
+                    "https://images.unsplash.com/photo-1617127365659-c47fa864d8bc?auto=format&fit=crop&w=900&q=85"
+                ]
+            },
+
+            creative: {
+                title: "Creative Wear",
+                description: "Experimental silhouettes and design-led concepts for a distinctive visual identity.",
+                images: [
+                    "https://images.unsplash.com/photo-1485230895905-ec40ba36b9bc?auto=format&fit=crop&w=900&q=85",
+                    "https://images.unsplash.com/photo-1469334031218-e382a71b716b?auto=format&fit=crop&w=900&q=85",
+                    "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=900&q=85",
+                    "https://images.unsplash.com/photo-1534383367528-4d0e6c5c6e09?auto=format&fit=crop&w=900&q=85",
+                    "https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&w=900&q=85",
+                    "https://images.unsplash.com/photo-1525507119028-ed4c629a60a3?auto=format&fit=crop&w=900&q=85"
+                ]
+            },
+
+            ethnic: {
+                title: "Ethnic Wear",
+                description: "Traditional inspiration interpreted through elegant contemporary styling.",
+                images: [
+                    "https://images.unsplash.com/photo-1583391733956-6c78276477e2?auto=format&fit=crop&w=900&q=85",
+                    "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=900&q=85",
+                    "https://images.unsplash.com/photo-1610189012906-b6c2d7d2c6b0?auto=format&fit=crop&w=900&q=85",
+                    "https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?auto=format&fit=crop&w=900&q=85",
+                    "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=900&q=85",
+                    "https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=900&q=85"
+                ]
+            },
+
+            casual: {
+                title: "Casual Wear",
+                description: "Easy, wearable and elegant fashion for everyday expression.",
+                images: [
+                    "https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=900&q=85",
+                    "https://images.unsplash.com/photo-1525507119028-ed4c629a60a3?auto=format&fit=crop&w=900&q=85",
+                    "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=900&q=85",
+                    "https://images.unsplash.com/photo-1503341504253-dff4815485f1?auto=format&fit=crop&w=900&q=85",
+                    "https://images.unsplash.com/photo-1485230895905-ec40ba36b9bc?auto=format&fit=crop&w=900&q=85",
+                    "https://images.unsplash.com/photo-1496747611176-843222e1e57c?auto=format&fit=crop&w=900&q=85"
+                ]
+            },
+
+            party: {
+                title: "Party Wear",
+                description: "Statement silhouettes designed for celebrations and special occasions.",
+                images: [
+                    "https://images.unsplash.com/photo-1566174053879-31528523f8ae?auto=format&fit=crop&w=900&q=85",
+                    "https://images.unsplash.com/photo-1566174053879-31528523f8ae?auto=format&fit=crop&w=900&q=85",
+                    "https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?auto=format&fit=crop&w=900&q=85",
+                    "https://images.unsplash.com/photo-1539109136881-3be0616acf4b?auto=format&fit=crop&w=900&q=85",
+                    "https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=900&q=85",
+                    "https://images.unsplash.com/photo-1485968579580-b6d095142e6e?auto=format&fit=crop&w=900&q=85"
+                ]
+            },
+
+            western: {
+                title: "Western Wear",
+                description: "Modern silhouettes with clean styling and contemporary visual direction.",
+                images: [
+                    "https://images.unsplash.com/photo-1539008835657-9e8e9680c956?auto=format&fit=crop&w=900&q=85",
+                    "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=900&q=85",
+                    "https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=900&q=85",
+                    "https://images.unsplash.com/photo-1496747611176-843222e1e57c?auto=format&fit=crop&w=900&q=85",
+                    "https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&w=900&q=85",
+                    "https://images.unsplash.com/photo-1485968579580-b6d095142e6e?auto=format&fit=crop&w=900&q=85"
+                ]
+            }
+
+        };
+
+
+        /* PAGE NAVIGATION */
+
+        function showPage(id, clickedButton = null) {
+
+            const transition = document.getElementById("pageTransition");
+
+            transition.classList.remove("go");
+            void transition.offsetWidth;
+            transition.classList.add("go");
+
+            setTimeout(() => {
+
+                document.querySelectorAll(".page").forEach(page => {
+                    page.classList.remove("active");
+                });
+
+                const target = document.getElementById(id);
+
+                if (target) {
+                    target.classList.add("active");
+                }
+
+                document.querySelectorAll(".nav-btn").forEach(btn => {
+                    btn.classList.remove("active");
+
+                    if (btn.innerText.trim().toLowerCase() === id.toLowerCase()) {
+                        btn.classList.add("active");
+                    }
+                });
+
+                window.scrollTo({ top: 0, behavior: "instant" });
+
+                setTimeout(() => {
+                    animateSkills();
+                }, 300);
+
+            }, 380);
+        }
+
+
+        /* MOBILE */
+
+        function toggleMenu() {
+            document.getElementById("mobileMenu").classList.toggle("show");
+        }
+
+        function mobileNavigate(id) {
+            document.getElementById("mobileMenu").classList.remove("show");
+            showPage(id);
+        }
+
+        function openWorkFromMobile() {
+            document.getElementById("mobileMenu").classList.remove("show");
+            openWorkModal();
+        }
+
+
+        /* HEADER SCROLL */
+
+        window.addEventListener("scroll", () => {
+
+            const header = document.getElementById("header");
+            const topBtn = document.getElementById("topBtn");
+            const progress = document.getElementById("scrollProgress");
+
+            header.classList.toggle("scrolled", window.scrollY > 40);
+            topBtn.classList.toggle("show", window.scrollY > 500);
+
+            const docHeight =
+                document.documentElement.scrollHeight -
+                document.documentElement.clientHeight;
+
+            const percent = docHeight > 0 ? (window.scrollY / docHeight) * 100 : 0;
+
+            progress.style.width = percent + "%";
+
+        });
+
+
+        /* MODAL HELPERS */
+
+        function openModal(id) {
+            document.getElementById(id).classList.add("show");
+            document.body.classList.add("modal-open");
+        }
+
+        function closeModal(id) {
+
+            document.getElementById(id).classList.remove("show");
+
+            if (id === "infoModal") {
+                const extra = document.getElementById("infoExtra");
+                if (extra) extra.innerHTML = "";
+            }
+
+            if (!document.querySelector(".modal.show")) {
+                document.body.classList.remove("modal-open");
+            }
+
+        }
+
+
+        /* COLLECTION */
+
+        function openCollection(type) {
+
+            const data = collections[type];
+
+            if (!data) return;
+
+            document.getElementById("collectionTitle").innerText = data.title;
+            document.getElementById("collectionDescription").innerText = data.description;
+
+            const container = document.getElementById("collectionImages");
+
+            container.innerHTML = "";
+
+            data.images.forEach((image, index) => {
+
+                const div = document.createElement("div");
+
+                div.className = "collection-image";
+
+                div.innerHTML = `
+            <img
+                src="${image}"
+                alt="${data.title} ${index + 1}"
+                onclick="openPreview('${image}')"
+            >
+        `;
+
+                container.appendChild(div);
+
+            });
+
+            openModal("collectionModal");
+
+        }
+
+
+        /* IMAGE PREVIEW */
+
+        function openPreview(image) {
+            document.getElementById("previewImage").src = image;
+            document.getElementById("imagePreview").classList.add("show");
+        }
+
+        function closePreview() {
+            document.getElementById("imagePreview").classList.remove("show");
+        }
+
+
+        /* WORK WITH ME */
+
+        function openWorkModal(service = "") {
+
+            openModal("workModal");
+
+            if (service) {
+
+                const buttons = document.querySelectorAll(".service-choice");
+
+                buttons.forEach(btn => {
+
+                    if (btn.innerText.toLowerCase().includes(service.toLowerCase())) {
+                        selectWorkService(btn, service);
+                    }
+
+                });
+
+            }
+
+        }
+
+
+        function selectWorkService(button, service) {
+
+            document.querySelectorAll(".service-choice").forEach(btn => {
+                btn.classList.remove("selected");
+            });
+
+            button.classList.add("selected");
+
+            document.getElementById("selectedWorkService").value = service;
+
+            showToast(service + " selected.");
+
+        }
+
+
+        function submitWorkForm(event) {
+
+            event.preventDefault();
+
+            const name = document.getElementById("workName").value;
+            const email = document.getElementById("workEmail").value;
+            const service = document.getElementById("selectedWorkService").value || "Creative Project";
+            const type = document.getElementById("workType").value;
+            const budget = document.getElementById("workBudget").value;
+            const message = document.getElementById("workMessage").value;
+
+            const text =
+                `Hello Naaz,
+
+I would like to discuss a project.
+
+Name: ${name}
+Email: ${email}
+Service: ${service}
+Project Type: ${type}
+Budget: ${budget}
+
+Project Details:
+${message}`;
+
+            const whatsapp = "https://wa.me/918860390867?text=" + encodeURIComponent(text);
+
+            window.open(whatsapp, "_blank");
+
+            showToast("Your project brief is ready for WhatsApp.");
+
+        }
+
+
+        /* CONCIERGE */
+
+        function openConcierge() {
+            openModal("conciergeModal");
+        }
+
+
+        /* STYLE QUIZ */
+
+        const quizQuestions = [
+
+            {
+                question: "What kind of occasion are you dressing for?",
+                options: [
+                    ["Wedding / Bridal", "Bridal"],
+                    ["Festive / Traditional", "Ethnic"],
+                    ["Party / Celebration", "Party"],
+                    ["Everyday / Modern", "Western"]
+                ]
+            },
+
+            {
+                question: "Which feeling describes your ideal outfit?",
+                options: [
+                    ["Elegant & Detailed", "Elegant"],
+                    ["Traditional & Graceful", "Ethnic"],
+                    ["Statement & Glamorous", "Party"],
+                    ["Clean & Contemporary", "Modern"]
+                ]
+            },
+
+            {
+                question: "Which direction attracts you most?",
+                options: [
+                    ["Custom & Personal", "Custom"],
+                    ["Heritage Inspired", "Ethnic"],
+                    ["Creative & Dramatic", "Creative"],
+                    ["Minimal & Modern", "Modern"]
+                ]
+            }
+
+        ];
+
+        let quizStep = 0;
+        let quizAnswers = [];
+
+
+        function startStyleQuiz() {
+
+            closeModal("conciergeModal");
+
+            quizStep = 0;
+            quizAnswers = [];
+
+            document.getElementById("quizResult").classList.remove("show");
+            document.getElementById("quizArea").style.display = "block";
+
+            renderQuiz();
+
+            openModal("quizModal");
+
+        }
+
+
+        function renderQuiz() {
+
+            const question = quizQuestions[quizStep];
+
+            document.getElementById("quizQuestion").innerText = question.question;
+
+            const options = document.getElementById("quizOptions");
+
+            options.innerHTML = "";
+
+            question.options.forEach(option => {
+
+                const button = document.createElement("button");
+
+                button.className = "quiz-option";
+                button.innerText = option[0];
+
+                button.onclick = () => {
+
+                    quizAnswers.push(option[1]);
+
+                    quizStep++;
+
+                    if (quizStep < quizQuestions.length) {
+                        renderQuiz();
+                    } else {
+                        showQuizResult();
+                    }
+
+                };
+
+                options.appendChild(button);
+
+            });
+
+        }
+
+
+        function showQuizResult() {
+
+            document.getElementById("quizArea").style.display = "none";
+
+            const counts = {};
+
+            quizAnswers.forEach(answer => {
+                counts[answer] = (counts[answer] || 0) + 1;
+            });
+
+            const result = Object.keys(counts).sort((a, b) => counts[b] - counts[a])[0];
+
+            const resultData = {
+
+                Bridal: ["Bridal / Occasion Direction", "Your choices point toward detailed occasion wear with an elegant, statement-focused direction."],
+                Ethnic: ["Elegant Ethnic Direction", "Your choices suggest a graceful traditional direction with room for contemporary detailing."],
+                Party: ["Statement Party Direction", "Your choices lean toward expressive occasion wear with a stronger visual presence."],
+                Western: ["Modern Western Direction", "Your choices suggest contemporary silhouettes with a clean, modern styling approach."],
+                Elegant: ["Elegant Custom Direction", "A refined, detail-focused direction may suit the style you described."],
+                Custom: ["Personalized Custom Direction", "Your choices show interest in a more individual and personalized fashion direction."],
+                Creative: ["Creative Fashion Direction", "Your answers lean toward experimentation, distinctive details and creative silhouettes."],
+                Modern: ["Contemporary Direction", "Your answers suggest clean, modern styling with a refined visual approach."]
+
+            };
+
+            const data = resultData[result] || [
+                "Your Personal Style Direction",
+                "Your answers suggest a personalized fashion direction."
+            ];
+
+            document.getElementById("quizResultTitle").innerText = data[0];
+            document.getElementById("quizResultText").innerText = data[1];
+
+            document.getElementById("quizResult").classList.add("show");
+
+        }
+
+
+        /* CLIENT BRIEF */
+
+        function openClientBrief() {
+
+            closeModal("conciergeModal");
+
+            document.getElementById("infoEyebrow").innerText = "Client Brief";
+            document.getElementById("infoTitle").innerText = "Prepare Your Idea.";
+            document.getElementById("infoText").innerText =
+                "Before starting a project, think about the occasion, desired style, preferred colours, references, timeline and any specific requirements. You can then share these details through the project inquiry form.";
+
+            openModal("infoModal");
+
+        }
+
+
+        /* SERVICE DETAILS */
+
+        const serviceDetails = {
+
+            custom: {
+                title: "Dress Customization",
+                description: "Personalized fashion designed around your occasion, preferences and desired visual direction.",
+                list: ["Understanding your requirement", "Silhouette and styling direction", "Fabric and colour consideration", "Customization and alteration discussion"]
+            },
+
+            bridal: {
+                title: "Bridal Wear",
+                description: "Elegant bridal fashion directions with focus on occasion, silhouette and refined details.",
+                list: ["Bridal style discussion", "Silhouette planning", "Detail and embellishment direction", "Personalized design discussion"]
+            },
+
+            ethnic: {
+                title: "Ethnic Wear",
+                description: "Traditional and contemporary ethnic fashion with attention to proportion, colour and styling.",
+                list: ["Ethnic style direction", "Fabric and colour planning", "Silhouette suggestions", "Customization discussion"]
+            },
+
+            sketch: {
+                title: "Fashion Sketching",
+                description: "Visualizing an outfit idea before moving toward execution.",
+                list: ["Initial concept", "Silhouette visualization", "Detail placement", "Design refinement"]
+            },
+
+            graphic: {
+                title: "Graphic Design",
+                description: "Creative digital design for fashion, business and personal projects.",
+                list: ["Pamphlets", "Brochures", "Visiting cards", "Menus", "Logos", "Banner creatives"]
+            },
+
+            social: {
+                title: "Social Media Design",
+                description: "Clean, aesthetic visual content designed for social media communication.",
+                list: ["Social posts", "Promotional creatives", "Content visuals", "Campaign graphics"]
+            },
+
+            creative: {
+                title: "Creative Detail",
+                description: "A design-led approach for concepts that need a stronger visual personality.",
+                list: ["Concept development", "Creative styling", "Detail exploration", "Visual direction"]
+            },
+
+            digital: {
+                title: "Digital Creativity",
+                description: "A combination of visual design, content creation and digital presentation.",
+                list: ["Canva design", "Photoshop editing", "Content creation", "Social media design"]
+            }
+
+        };
+
+
+        function openServiceDetail(type) {
+
+            const data = serviceDetails[type] || serviceDetails.custom;
+
+            document.getElementById("detailTitle").innerText = data.title;
+            document.getElementById("detailDescription").innerText = data.description;
+
+            const list = document.getElementById("detailList");
+
+            list.innerHTML = "";
+
+            data.list.forEach(item => {
+
+                const div = document.createElement("div");
+
+                div.innerHTML = `
+            <i class="fa-solid fa-check"></i>
+            ${item}
+        `;
+
+                list.appendChild(div);
+
+            });
+
+            document.getElementById("detailWorkBtn").onclick = () => {
+                closeModal("detailModal");
+                openWorkModal(type);
+            };
+
+            openModal("detailModal");
+
+        }
+
+
+        /* PROCESS DETAILS */
+
+        function openProcess(title) {
+
+            const descriptions = {
+
+                Understand: "The first step is understanding the occasion, personal style, practical requirements and overall creative direction.",
+                Design: "The idea is transformed into a visual direction through silhouette, styling, colour and concept decisions.",
+                Detail: "Details such as fabric, colour, finishing, proportion and visual balance are considered carefully.",
+                Complete: "The final direction comes together into a clear creative outcome ready for the next stage."
+
+            };
+
+            document.getElementById("infoEyebrow").innerText = "Naaz Process";
+            document.getElementById("infoTitle").innerText = title;
+            document.getElementById("infoText").innerText = descriptions[title];
+
+            openModal("infoModal");
+
+        }
+
+
+        /* =========================================================
+           EDUCATION DETAILS (from first code)
+        ========================================================= */
+
+        const educationDetails = {
+
+            "10th": {
+                year: "2019",
+                title: "10th — Secondary Education",
+                text: "Completed secondary education from Sushila Inter College.",
+                extra: "This stage built the academic foundation for further study."
+            },
+
+            "12th": {
+                year: "2021",
+                title: "12th — Senior Secondary",
+                text: "Completed senior secondary education from Sushila Inter College.",
+                extra: "This stage strengthened the academic foundation before higher education."
+            },
+
+            "Diploma": {
+                year: "2024",
+                title: "Diploma in Fashion Designing",
+                text: "Completed a Fashion Designing Diploma in 2024.",
+                extra: "The diploma strengthened practical understanding of fashion, garment design, styling, fabrics and customization."
+            },
+
+            "BA": {
+                year: "2026",
+                title: "B.A. — CCSU",
+                text: "Completed B.A. from Chaudhary Charan Singh University in 2026.",
+                extra: "Subjects: English, Philosophy and Political Science. This academic background contributes to communication, analytical thinking and broader creative perspective."
+            }
+
+        };
+
+        function openEducation(type) {
+
+            const data = educationDetails[type];
+
+            if (!data) return;
+
+            document.getElementById("infoEyebrow").textContent = "Education • " + data.year;
+
+            document.getElementById("infoTitle").innerHTML = data.title.replace("—", "<span>—</span>");
+
+            document.getElementById("infoText").textContent = data.text;
+
+            document.getElementById("infoExtra").innerHTML = `
+
+<div style="
+margin-top:20px;
+padding:22px;
+background:var(--paper2);
+border-radius:18px;
+line-height:1.8;
+font-size:13px;
+">
+
+<strong style="
+font-family:'Cormorant Garamond';
+font-size:24px;
+">
+
+What It Added To My Journey
+
+</strong>
+
+<br><br>
+
+${data.extra}
+
+</div>
+
+`;
+
+            openModal("infoModal");
+
+        }
+
+
+        /* =========================================================
+           EXPERIENCE DETAILS (from first code)
+        ========================================================= */
+
+        const experienceDetails = {
+
+            "Client Work": {
+                title: "Client-Focused Work",
+                text: "My practical experience has taught me to start with the client's requirement instead of immediately jumping into a design.",
+                extra: [
+                    "Understanding personal preferences",
+                    "Discussing occasion and purpose",
+                    "Suggesting suitable directions",
+                    "Keeping communication clear",
+                    "Refining according to requirements"
+                ]
+            },
+
+            "Fashion Work": {
+                title: "Fashion Experience",
+                text: "My hands-on fashion work includes practical areas involved in customized clothing and boutique work.",
+                extra: [
+                    "Dress customization",
+                    "Alteration",
+                    "Fabric selection",
+                    "Fashion styling",
+                    "Ethnic and western wear",
+                    "Party and occasion wear"
+                ]
+            },
+
+            "Customization": {
+                title: "Dress Customization",
+                text: "Creating or modifying outfits according to individual preferences, measurements and occasion.",
+                extra: [
+                    "Personal requirements",
+                    "Silhouette changes",
+                    "Fabric consideration",
+                    "Detailing"
+                ]
+            },
+
+            "Alteration": {
+                title: "Alteration",
+                text: "Practical garment alteration work focused on improving fit and making necessary adjustments.",
+                extra: [
+                    "Fit adjustments",
+                    "Length changes",
+                    "Shape refinement",
+                    "Finishing"
+                ]
+            },
+
+            "Fabric": {
+                title: "Fabric Selection",
+                text: "Helping connect the desired outfit style with an appropriate fabric direction.",
+                extra: [
+                    "Occasion",
+                    "Comfort",
+                    "Fall & structure",
+                    "Colour",
+                    "Overall look"
+                ]
+            },
+
+            "Styling": {
+                title: "Fashion Styling",
+                text: "Developing a cohesive look through outfit direction, colours, fabrics and detailing.",
+                extra: [
+                    "Occasion-based styling",
+                    "Colour coordination",
+                    "Accessory direction",
+                    "Overall visual balance"
+                ]
+            }
+
+        };
+
+        function openExperienceDetail(type) {
+
+            const data = experienceDetails[type];
+
+            if (!data) return;
+
+            document.getElementById("infoEyebrow").textContent = "Experience";
+
+            document.getElementById("infoTitle").innerHTML = data.title;
+
+            document.getElementById("infoText").textContent = data.text;
+
+            document.getElementById("infoExtra").innerHTML =
+                data.extra.map(item => `
+
+<div style="
+padding:13px 0;
+border-bottom:1px solid var(--line);
+font-size:13px;
+">
+
+<i class="fa-solid fa-check"
+style="color:var(--brown);margin-right:10px"></i>
+
+${item}
+
+</div>
+
+`).join("");
+
+            openModal("infoModal");
+
+        }
+
+
+        /* =========================================================
+           CLIENT BENEFITS (from first code)
+        ========================================================= */
+
+        const benefitDetails = {
+
+            "Free Style Consultation": {
+                title: "Free Style Consultation",
+                text: "Before starting a suitable project, you can discuss your occasion, preferences and desired look. This helps create a clearer direction before the actual work begins.",
+                note: "Complimentary consultation is subject to project type and availability."
+            },
+
+            "Colour & Fabric Guidance": {
+                title: "Colour & Fabric Guidance",
+                text: "For fashion projects, helpful suggestions can be provided around colour combinations, fabric direction and the overall look.",
+                note: "Final fabric availability and purchase remain project dependent."
+            },
+
+            "Basic Design Direction": {
+                title: "Basic Design Direction",
+                text: "You can discuss the basic creative direction before the project is finalized, helping both sides understand the intended look.",
+                note: "Detailed design development may be part of the selected paid service."
+            },
+
+            "Personalized Project Brief": {
+                title: "Personalized Project Brief",
+                text: "Your project requirements can be organized into a clear brief covering the service, preferences, purpose and important details.",
+                note: "This helps keep communication organized."
+            },
+
+            "Digital Preview": {
+                title: "Initial Digital Preview",
+                text: "For suitable digital projects, an initial direction or preview can be discussed before final execution.",
+                note: "Availability depends on the selected project and scope."
+            },
+
+            "WhatsApp Project Support": {
+                title: "Easy WhatsApp Communication",
+                text: "After initiating a project, WhatsApp can be used for convenient communication, references and project discussion.",
+                note: "Response time can vary depending on availability."
+            },
+
+            "Revision Guidance": {
+                title: "Refinement Support",
+                text: "Agreed project revisions can be discussed and organized so the final direction stays aligned with the original brief.",
+                note: "Revision limits depend on the selected service."
+            },
+
+            "Returning Client Benefit": {
+                title: "Returning Client Care",
+                text: "Returning clients can receive personalized attention when discussing future projects.",
+                note: "Any special pricing or benefit is discussed individually rather than automatically guaranteed."
+            }
+
+        };
+
+        function openBenefit(name) {
+
+            const data = benefitDetails[name];
+
+            if (!data) return;
+
+            document.getElementById("infoEyebrow").textContent = "Naaz Client Privilege";
+
+            document.getElementById("infoTitle").innerHTML = data.title;
+
+            document.getElementById("infoText").textContent = data.text;
+
+            document.getElementById("infoExtra").innerHTML = `
+
+<div style="
+margin-top:20px;
+padding:20px;
+background:var(--paper2);
+border-radius:18px;
+font-size:12px;
+line-height:1.8;
+">
+
+<strong>
+<i class="fa-solid fa-wand-magic-sparkles"
+style="color:var(--brown)"></i>
+Client Note
+</strong>
+
+<br><br>
+
+${data.note}
+
+</div>
+
+`;
+
+            openModal("infoModal");
+
+        }
+
+
+        /* =========================================================
+           WHY NAAZ (from first code)
+        ========================================================= */
+
+        const whyDetails = {
+
+            "Personalized Approach": {
+                title: "Personalized Approach",
+                text: "I prefer understanding what the client actually needs before deciding the creative direction.",
+                extra: "The goal is to create something appropriate for the person, occasion and project rather than using a one-size-fits-all approach."
+            },
+
+            "Attention to Detail": {
+                title: "Attention to Detail",
+                text: "Small details can change the overall feel of an outfit or visual design.",
+                extra: "I focus on colour, proportion, layout, finishing and visual consistency."
+            },
+
+            "Fashion + Digital": {
+                title: "Fashion + Digital",
+                text: "My portfolio combines fashion designing and digital creative skills.",
+                extra: "This allows me to work across customized fashion projects as well as selected digital design requirements."
+            },
+
+            "Clear Communication": {
+                title: "Clear Communication",
+                text: "A project becomes easier when requirements are discussed clearly before execution.",
+                extra: "I aim to keep the project direction, requirements and agreed scope understandable from the beginning."
+            }
+
+        };
+
+        function openWhy(name) {
+
+            const data = whyDetails[name];
+
+            if (!data) return;
+
+            document.getElementById("infoEyebrow").textContent = "Why Naaz";
+
+            document.getElementById("infoTitle").innerHTML = data.title;
+
+            document.getElementById("infoText").textContent = data.text;
+
+            document.getElementById("infoExtra").innerHTML = `
+
+<div style="
+padding:20px;
+background:var(--paper2);
+border-radius:18px;
+margin-top:20px;
+line-height:1.8;
+font-size:13px;
+">
+
+${data.extra}
+
+</div>
+
+`;
+
+            openModal("infoModal");
+
+        }
+
+
+        /* SKILLS */
+
+        function animateSkills() {
+
+            document.querySelectorAll(".skill-fill").forEach(bar => {
+
+                const width = bar.dataset.width;
+
+                setTimeout(() => {
+                    bar.style.width = width + "%";
+                }, 200);
+
+            });
+
+        }
+
+
+        /* CONTACT */
+
+        function submitContact(event) {
+
+            event.preventDefault();
+
+            const name = document.getElementById("contactName").value;
+            const service = document.getElementById("contactService").value;
+            const message = document.getElementById("contactMessage").value;
+
+            const text =
+                `Hello Naaz,
+
+My name is ${name}.
+
+I am interested in: ${service}
+
+Project details:
+${message}`;
+
+            const whatsapp = "https://wa.me/918860390867?text=" + encodeURIComponent(text);
+
+            window.open(whatsapp, "_blank");
+
+            event.target.reset();
+
+            showToast("Inquiry prepared for WhatsApp.");
+
+        }
+
+
+        /* TOAST */
+
+        let toastTimer;
+
+        function showToast(message) {
+
+            const toast = document.getElementById("toast");
+
+            toast.innerText = message;
+
+            toast.classList.add("show");
+
+            clearTimeout(toastTimer);
+
+            toastTimer = setTimeout(() => {
+                toast.classList.remove("show");
+            }, 2800);
+
+        }
+
+
+        /* OUTSIDE CLICK */
+
+        document.querySelectorAll(".modal").forEach(modal => {
+
+            modal.addEventListener("click", (event) => {
+
+                if (event.target === modal) {
+                    closeModal(modal.id);
+                }
+
+            });
+
+        });
+
+        document.getElementById("imagePreview").addEventListener("click", (event) => {
+
+            if (event.target.id === "imagePreview") {
+                closePreview();
+            }
+
+        });
+
+
+        /* ESC KEY */
+
+        document.addEventListener("keydown", (event) => {
+
+            if (event.key === "Escape") {
+
+                document.querySelectorAll(".modal.show").forEach(modal => {
+                    closeModal(modal.id);
+                });
+
+                closePreview();
+
+                document.getElementById("mobileMenu").classList.remove("show");
+
+            }
+
+        });
+
+
+        /* IMAGE FALLBACK */
+
+        document.addEventListener("error", function (event) {
+
+            if (event.target.tagName === "IMG") {
+                event.target.style.background = "#cfc3b5";
+            }
+
+        }, true);
+
+
+        /* INITIALIZATION */
+
+        window.addEventListener("load", () => {
+            animateSkills();
+        });
+
+    </script>
+
+</body>
+
+</html>
